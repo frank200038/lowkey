@@ -24,7 +24,7 @@ __license__ = "GPL-3.0"
 
 class DSLParser():
     
-    _globalCommands = ["CREATE", "LINK", "UPDATE", "DELETE"]
+    _globalCommands = ["CREATE-VIEW","CREATE", "LINK", "UPDATE", "DELETE"]
     _localCommands = ["READ", "OBJECTS"]
     
     def tokenize(self, message):
@@ -48,8 +48,14 @@ class DSLParser():
         tokens = self.tokenize(message)
         
         command = ''
-        
-        if tokens[0].upper() == 'CREATE':
+
+        # Format: CREATE-VIEW [Mapname] {[Types]} [ViewName]
+        # Format Lowkey: CREATE_VIEW -typedBy [type] -name [Mapname] -viewName [ViewName] -types {[Types]}
+        if tokens[0].upper() == 'CREATE-VIEW':
+            userCommand, mapName, types, viewName = tokens
+            command += 'CREATE_VIEW -{} {} -name {} -viewName {} -types {}'.format(Literals.TYPED_BY, MindMapPackage.TYPES.MINDMAP,
+                                                            mapName, viewName, types)
+        elif tokens[0].upper() == 'CREATE':
             userCommand, type, name = tokens 
             command += '{} -{} {} -{} {}'.format(userCommand, Literals.TYPED_BY, type, Literals.NAME, name)
             

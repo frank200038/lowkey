@@ -8,6 +8,7 @@ from lowkey.collabtypes import Literals
 from lowkey.collabapi.commands.CreateClabjectCommand import CreateClabjectCommand
 from lowkey.collabapi.commands.CreateAssociationCommand import CreateAssociationCommand
 from lowkey.collabapi.commands.UpdateCommand import UpdateCommand
+from lowkey.collabapi.commands.AddViewCommand import AddViewCommand
 
 __author__ = "Istvan David"
 __copyright__ = "Copyright 2021, GEODES"
@@ -35,7 +36,7 @@ association.setFeature(Literals.ASSOCIATION_TO, {toClabject})
 
 class Parser():
     
-    _commands = ["CREATE", "LINK", "UPDATE", "DELETE"]
+    _commands = ["CREATE_VIEW", "CREATE", "LINK", "UPDATE", "DELETE"]
     
     def __init__(self):
         logging.basicConfig(format='[%(levelname)s] %(message)s', level=logging.DEBUG)
@@ -47,14 +48,16 @@ class Parser():
         return command in self._commands
     
     def getParams(self, message):
-        pattern = "[\-][a-zA-Z0-9]*\s[a-zA-Z0-9]*"
+        pattern = "-([a-zA-Z0-9]+)\s*(\{[a-zA-Z0-9]+(?:,[a-zA-Z0-9]+)*\}|[a-zA-Z0-9]*)"
+        # pattern = "[\-][a-zA-Z0-9]*\s[a-zA-Z0-9]*"
         
         parameters = []
         
         rawParameters = re.findall(pattern, message)
         for p in rawParameters:
-            name, value = p.split()
-            name = name.replace("-", "")
+            name, value = p
+            #name, value = p.split()
+            #name = name.replace("-", "")
             parameters.append([name, value])
         
         return parameters
@@ -69,5 +72,7 @@ class Parser():
             return CreateAssociationCommand(self.getParams(message))
         elif commandKeyWord == "UPDATE":
             return UpdateCommand(self.getParams(message))
+        elif commandKeyWord == "CREATE_VIEW":
+            return AddViewCommand(self.getParams(message))
         else:
             raise Error("Command is unsupported or invalid")

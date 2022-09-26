@@ -62,4 +62,6 @@ class Session():
                 association.setName(pValue)
         
         self.integrateNode(association)
-        
+
+    # def integrateView(self,):
+

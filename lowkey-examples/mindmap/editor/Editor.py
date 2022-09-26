@@ -79,6 +79,7 @@ class Editor(Client):
                 commandObject = self._parser.processLocalMessage(commandKeyWord)
                 commandObject.execute(self._session)
             elif self._parser.isGlobalCommand(commandKeyWord):
+                message = userInput
                 collabAPICommand = self._parser.translateIntoCollabAPICommand(message)
                 # process locally
                 self._session.processMessage(collabAPICommand)

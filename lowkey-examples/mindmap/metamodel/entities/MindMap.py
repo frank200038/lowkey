@@ -37,6 +37,12 @@ class MindMap(Entity):
     # Methods: get, set, remove
     def getTopic(self):
         model = self.getModel()
+        nodes = model.getNodes()
+
+        # for node in nodes:
+        #     print(node.getName() + " " + node.getType())
+        #
+        # print(model.getNodes())
         if not model:
             return None
         
@@ -46,25 +52,25 @@ class MindMap(Entity):
             return topicAssociations[0].getTo()  # safe due to MultiplicityToMax = 1
         return None
     
-    def setTopic(self, topic: CentralTopic):  # typing due to Type: CentralTopic
-        model = self.getModel()
-        if not model:
-            return None
-        
-        topicAssociations = [a for a in model.getAssociationsByName(MindMapPackage.ASSOCIATION_MINDMAP_CENTRALTOPIC) if a.getFrom() == self._clabject]
-        
-        if topicAssociations:
-            # Removes the association to the Marker object but not the object
-            # safe due to MultiplicityToMax = 1
-            model.removeNode(topicAssociations[0])
-        
-        topicAssociation = Association()
-        topicAssociation.setName(MindMapPackage.ASSOCIATION_MINDMAP_CENTRALTOPIC)
-        topicAssociation.setFrom(self)
-        topicAssociation.setTo(topic)
-        topicAssociation.setComposition(True)
-        
-        model.addNode(topicAssociation)
+    # def setTopic(self, topic: CentralTopic):  # typing due to Type: CentralTopic
+    #     model = self.getModel()
+    #     if not model:
+    #         return None
+    #
+    #     topicAssociations = [a for a in model.getAssociationsByName(MindMapPackage.ASSOCIATION_MINDMAP_CENTRALTOPIC) if a.getFrom() == self._clabject]
+    #
+    #     if topicAssociations:
+    #         # Removes the association to the Marker object but not the object
+    #         # safe due to MultiplicityToMax = 1
+    #         model.removeNode(topicAssociations[0])
+    #
+    #     topicAssociation = Association()
+    #     topicAssociation.setName(MindMapPackage.ASSOCIATION_MINDMAP_CENTRALTOPIC)
+    #     topicAssociation.setFrom(self)
+    #     topicAssociation.setTo(topic)
+    #     topicAssociation.setComposition(True)
+    #
+    #     model.addNode(topicAssociation)
     
     def removeTopic(self):
         model = self.getModel()
@@ -92,7 +98,7 @@ class MindMap(Entity):
         markerAssociations = [a for a in self.getModel().getAssociationsByName(MindMapPackage.ASSOCIATION_MINDMAP_MARKER) if a.getFrom() == self._clabject]
         
         markers = []
-        for a in markersAssociations:
+        for a in markerAssociations:
             markers.append(a.getTo())
         return markers
     
