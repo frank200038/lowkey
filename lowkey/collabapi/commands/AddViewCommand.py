@@ -8,4 +8,4 @@ class AddViewCommand(Command):
 
     def execute(self, session):
         print(self._params)
-        # session.integrateView()
+        session.createView(self._params)

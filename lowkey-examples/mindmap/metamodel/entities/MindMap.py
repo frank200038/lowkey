@@ -37,7 +37,7 @@ class MindMap(Entity):
     # Methods: get, set, remove
     def getTopic(self):
         model = self.getModel()
-        nodes = model.getNodes()
+       # nodes = model.getNodes()
 
         # for node in nodes:
         #     print(node.getName() + " " + node.getType())

@@ -59,6 +59,12 @@ class Association(Clabject):
 
     def setComposition(self, isComposition):
         self.setFeature(Literals.ASSOCIATION_IS_COMPOSITION, isComposition)
+
+    def setFor(self, name):
+        self.setFeature(Literals.FOR, name)
+
+    def getFor(self):
+        return self.getFeature(Literals.FOR)
         
     def isComposition(self):
         return self.getFeature(Literals.ASSOCIATION_IS_COMPOSITION)

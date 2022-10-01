@@ -9,7 +9,6 @@ class MindMapModel(Model):
     def __init__(self, title=""):
         super().__init__()
         self.setTitle(title)
-
     # title: Attribute
     # ========================
     # Multiplicity: 1
@@ -24,3 +23,6 @@ class MindMapModel(Model):
         
     def getMindmaps(self):
         return [c for c in self.getClabjects() if c.getType() == MindMapPackage.TYPES.MINDMAP]
+
+    def getMindmapsByName(self, name):
+        return [c for c in self.getClabjects() if c.getType() == MindMapPackage.TYPES.MINDMAP and c.getName(name)]

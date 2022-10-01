@@ -102,3 +102,5 @@ class Node():
     def deleteFeature(self, name):
         self._clock.sleepOneStep()
         self.persistence.remove(name, self.currentTime())
+
+

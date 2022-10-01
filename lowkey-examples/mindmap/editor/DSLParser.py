@@ -56,17 +56,26 @@ class DSLParser():
             command += 'CREATE_VIEW -{} {} -name {} -viewName {} -types {}'.format(Literals.TYPED_BY, MindMapPackage.TYPES.MINDMAP,
                                                             mapName, viewName, types)
         elif tokens[0].upper() == 'CREATE':
-            userCommand, type, name = tokens 
+            # TODO: Enforce Check (Addition of FOR keyword)
+            # TODO: Throwing exception to handle errors better (Last stage)
+
+            if len(tokens) == 3:
+                userCommand, type, name = tokens
+            else: # CREATE CentralTopic A Test (For Entity Name at the end to specify which is it for)
+                userCommand, type, name, forEntity = tokens
+
             command += '{} -{} {} -{} {}'.format(userCommand, Literals.TYPED_BY, type, Literals.NAME, name)
             
             if type == MindMapPackage.TYPES.MINDMAP:
-                command += ' -{} {}'.format(MindMapPackage.TITLE, name)
+                command += ' -{} {} -for NONE'.format(MindMapPackage.TITLE, name)
             elif type == MindMapPackage.TYPES.MARKER:
-                command += ' -{} {}'.format(MindMapPackage.MARKER_SYMBOL, name)
+                command += ' -{} {} -for {}'.format(MindMapPackage.MARKER_SYMBOL, name, forEntity)
+            else:
+                command += ' -for {}'.format(forEntity)
         elif tokens[0].upper() == 'LINK':
-            userCommand, sourceAndPort, _toKeyWord, target = tokens
+            userCommand, sourceAndPort, _toKeyWord, target, forEntity= tokens
             source, name = sourceAndPort.split('.')
-            command += '{} -from {} -to {} -{} {}'.format(userCommand, source, target, Literals.NAME, name)
+            command += '{} -from {} -to {} -{} {} -for {}'.format(userCommand, source, target, Literals.NAME, name, forEntity)
         elif tokens[0].upper() == 'UPDATE':
             userCommand, clabjectName, attributeName, newValue = tokens
             command += '{} -{} {} -{} {}'.format(userCommand, Literals.NAME, clabjectName, attributeName, newValue)
