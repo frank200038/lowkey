@@ -1,5 +1,6 @@
 from lowkey.collabtypes.Association import Association
 from lowkey.collabtypes.Clabject import Clabject
+from lowkey.collabtypes.Entity import Entity
 from metamodel import MindMapPackage
 
 class Product(Entity):
