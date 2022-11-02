@@ -22,7 +22,7 @@ class Model(Node):
         super().__init__()
         self.persistence = LWWGraph()
         self.setFeature(Literals.NODES, ())
-        self.__views = []
+        self.views = []
 
     # Nodes CRUD
     def addNode(self, node: Node):

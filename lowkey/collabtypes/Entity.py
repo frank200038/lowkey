@@ -30,10 +30,10 @@ class Entity():
         return [a for a in self.getAssociations() if a.getName() == self._clabject.getName()]
     
     def getOutgoingAssociations(self):
-        raise NotImplementedError
+        return [a for a in self.getAssociations() if a.getFrom() == self._clabject]
     
     def getIncomingAssociations(self):
-        raise NotImplementedError
+        return [a for a in self.getAssociations() if a.getTo() == self._clabject]
     
     def getContainedNodes(self):
         raise NotImplementedError

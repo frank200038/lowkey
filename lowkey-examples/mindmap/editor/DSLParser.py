@@ -41,6 +41,9 @@ class DSLParser():
             return ReadCommand()
         elif commandKeyWord == "OBJECTS":
             return ReadObjectsCommand()
+        elif commandKeyWord == "Show View":
+            viewName = input("Enter the name of the view: ")
+
         else:
             logging.error("Unexpected command keyword.")
     
@@ -61,6 +64,7 @@ class DSLParser():
 
             if len(tokens) == 3:
                 userCommand, type, name = tokens
+                forEntity = None
             else: # CREATE CentralTopic A Test (For Entity Name at the end to specify which is it for)
                 userCommand, type, name, forEntity = tokens
 
@@ -68,12 +72,13 @@ class DSLParser():
             
             if type == MindMapPackage.TYPES.MINDMAP:
                 command += ' -{} {} -for NONE'.format(MindMapPackage.TITLE, name)
-            elif type == MindMapPackage.TYPES.MARKER:
+            elif type == MindMapPackage.TYPES.MARKER and forEntity:
+                # TODO: Add support for -for Optional
                 command += ' -{} {} -for {}'.format(MindMapPackage.MARKER_SYMBOL, name, forEntity)
-            else:
+            elif forEntity:
                 command += ' -for {}'.format(forEntity)
-        elif tokens[0].upper() == 'LINK':
-            userCommand, sourceAndPort, _toKeyWord, target, forEntity= tokens
+        elif tokens[0].upper() == 'LINK' and len(tokens) == 5:
+            userCommand, sourceAndPort, _toKeyWord, target, forEntity = tokens
             source, name = sourceAndPort.split('.')
             command += '{} -from {} -to {} -{} {} -for {}'.format(userCommand, source, target, Literals.NAME, name, forEntity)
         elif tokens[0].upper() == 'UPDATE':

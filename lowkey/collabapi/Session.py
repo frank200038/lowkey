@@ -40,6 +40,7 @@ class Session():
         command.execute(self)
 
     def integrateNode(self, node):
+        # TODO: Do I need to add view as a node ?
         node.addToModel(self.getModels()[0])
 
     def integrateAssociation(self, params):
