@@ -3,7 +3,6 @@ from lowkey.collabtypes.Clabject import Clabject
 from lowkey.collabtypes.Entity import Entity
 from lowkey.collabtypes.Model import Model
 from metamodel import MindMapPackage
-
 from .CentralTopic import CentralTopic
 
 
