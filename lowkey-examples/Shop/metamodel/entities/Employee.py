@@ -7,7 +7,7 @@ class Employee(Entity):
     def __init__(self, clabject:Clabject = None):
         if not clabject:
             clabject = Clabject()
-            clabject.setType(ShopPackage.Employee)
+            clabject.setType(ShopPackage.TYPES.EMPLOYEE)
         super().__init__(clabject)
 
     # Shop
@@ -24,19 +24,7 @@ class Employee(Entity):
         shopAssociations = [a for a in model.getAssociationsByName(ShopPackage.ASSOCIATION_SHOP_EMPLOYEE) if a.getTo() == self._clabject]
 
         if shopAssociations:
-            model.removeNode(shopAssociations[0])\
-
-    def setShop(self, shop):
-        self.removeShop()
-
-        if shop:
-            shopAssociation = Association()
-            shopAssociation.setName(ShopPackage.ASSOCIATION_SHOP_EMPLOYEE)
-            shopAssociation.setFrom(shop)
-            shopAssociation.setTo(self)
-            shopAssociation.setComposition(False)
-
-            self.getModel().addNode(shopAssociation)
+            model.removeNode(shopAssociations[0])
 
     # Employee ID : Attribute
     # Unique, String

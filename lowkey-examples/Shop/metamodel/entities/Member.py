@@ -7,7 +7,7 @@ class Member(Entity):
     def __init__(self, clabject:Clabject=None):
         if not clabject:
             clabject = Clabject()
-            clabject.setType(ShopPackage.MEMBER)
+            clabject.setType(ShopPackage.TYPES.MEMBER)
         super().__init__(clabject)
 
     # Purchase
@@ -28,44 +28,31 @@ class Member(Entity):
             model.removeNode(shopAssociations[0])
 
 
-    def setShop(self, shop):
-        self.removeShop()
-
-        if shop:
-            shopAssociation = Association()
-            shopAssociation.setName(ShopPackage.ASSOCIATION_SHOP_MEMBER)
-            shopAssociation.setFrom(shop)
-            shopAssociation.setTo(self)
-            shopAssociation.setComposition(False)
-
-            self.getModel().addNode(shopAssociation)
-
-
-    # Product
+    # Order
     # FROM: 1..1
     # TO: 0..*
-    def getProducts(self):
-         productAssociations = [a for a in self.getModel().getAssociationsByName(ShopPackage.ASSOCIATION_PRODUCT_MEMBER) if a.getFrom() == self._clabject]
+    def getOrders(self):
+        orderAssociations = [a for a in self.getModel().getAssociationsByName(ShopPackage.ASSOCIATION_MEMBER_ORDER) if a.getFrom() == self._clabject]
 
-         return [a.getTo() for a in productAssociations]
+        return [a.getTo() for a in orderAssociations]
 
-    def addProduct(self, product):
-         productAssociation = Association()
-         productAssociation.setName(ShopPackage.ASSOCIATION_PRODUCT_MEMBER)
-         productAssociation.setFrom(self)
-         productAssociation.setTo(product)
-         productAssociation.setComposition(False)
+    def removeOrder(self, order):
+        model = self.getModel()
+        orderAssociations = [a for a in model.getAssociationsByName(ShopPackage.ASSOCIATION_MEMBER_ORDER) if a.getFrom() == self._clabject]
 
-         self.getModel().addNode(productAssociation)
+        for orderAssociation in orderAssociations:
+            if orderAssociation.getTo() == order:
+                model.removeNode(orderAssociation)
+                return
 
-    def removeProduct(self, product):
-         model = self.getModel()
-         productAssociations = [a for a in model.getAssociationsByName(ShopPackage.ASSOCIATION_PRODUCT_MEMBER) if a.getFrom() == self._clabject and a.getTo() == product]
+    def addOrder(self, order):
+        orderAssociation = Association()
+        orderAssociation.setName(ShopPackage.ASSOCIATION_MEMBER_ORDER)
+        orderAssociation.setFrom(self)
+        orderAssociation.setTo(order)
+        orderAssociation.setComposition(False)
 
-         for a in productAssociations:
-             if a.getTo() == product:
-                 model.removeNode(a)
-                 return
+        self.getModel().addNode(orderAssociation)
 
     # member ID : Attribute
     # Unique, String

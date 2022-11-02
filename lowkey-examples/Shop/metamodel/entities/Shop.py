@@ -7,7 +7,7 @@ class Shop(Entity):
     def __init__(self, clabject:Clabject=None):
         if not clabject:
             clabject = Clabject()
-            clabject.setType(ShopPackage.SHOP)
+            clabject.setType(ShopPackage.TYPES.SHOP)
         super().__init__(clabject)
 
     # Employee
@@ -75,3 +75,12 @@ class Shop(Entity):
 
     def setShopID(self, shopID):
         self.setAttribute(ShopPackage.SHOP_ID, shopID)
+
+    # Shop Name: Attribute
+    # String
+    def getShopName(self):
+        return self.getAttribute(ShopPackage.SHOP_NAME)
+
+    def setShopName(self, shopName):
+        self.setAttribute(ShopPackage.SHOP_NAME, shopName)
+

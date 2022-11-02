@@ -7,5 +7,5 @@ class Film(Product):
     def __init__(self, clabject:Clabject=None):
         if not clabject:
             clabject = Clabject()
-            clabject.setType(ShopPackage.FILM)
+            clabject.setType(ShopPackage.TYPES.FILM)
         super().__init__(clabject)

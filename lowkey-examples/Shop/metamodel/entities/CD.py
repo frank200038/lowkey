@@ -7,5 +7,5 @@ class CD(Product):
     def __init__(self, clabject:Clabject=None):
         if not clabject:
             clabject = Clabject()
-            clabject.setType(ShopPackage.CD)
+            clabject.setType(ShopPackage.TYPES.CD)
         super().__init__(clabject)

@@ -5,15 +5,20 @@ class TYPES():
     BOOK = "Book"
     CD = "CD"
     FILM = "Film"
-    TYPES = [SHOP, MEMBER, EMPLOYEE, BOOK, CD, FILM]
+    ORDER = "Order"
+    TYPES = [SHOP, MEMBER, EMPLOYEE, BOOK, CD, FILM, ORDER]
 
+TITLE = "title"
 
-ASSOCIATION_SHOP_MEMBER = "has"
-ASSOCIATION_MEMBER_PRODUCT = "purchase"
-ASSOCIATION_SHOP_EMPLOYEE = "employs"
+ASSOCIATION_SHOP_MEMBER = "members"
+ASSOCIATION_MEMBER_ORDER = "orders"
+ASSOCIATION_ORDER_PRODUCT= "products"
+ASSOCIATION_SHOP_EMPLOYEE = "employees"
 
 MEMBER_ID = "memberID"
 MEMBER_NAME = "memberName"
+
+ORDER_ID = "orderID"
 
 PRODUCT_ID = "productID"
 PRODUCT_NAME = "productName"
@@ -23,3 +28,4 @@ EMPLOYEE_ID = "employeeID"
 EMPLOYEE_NAME = "employeeName"
 
 SHOP_ID = "shopID"
+SHOP_NAME = "shopName"
