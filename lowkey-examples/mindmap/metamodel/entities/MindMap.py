@@ -3,6 +3,8 @@ from lowkey.collabtypes.Clabject import Clabject
 from lowkey.collabtypes.Entity import Entity
 from lowkey.collabtypes.Model import Model
 from metamodel import MindMapPackage
+
+
 from .CentralTopic import CentralTopic
 
 
@@ -36,12 +38,6 @@ class MindMap(Entity):
     # Methods: get, set, remove
     def getTopic(self):
         model = self.getModel()
-       # nodes = model.getNodes()
-
-        # for node in nodes:
-        #     print(node.getName() + " " + node.getType())
-        #
-        # print(model.getNodes())
         if not model:
             return None
         
@@ -121,3 +117,4 @@ class MindMap(Entity):
             if a.getTo() == marker:
                 model.removeNode(a)
                 return
+

@@ -71,3 +71,6 @@ class Model(Node):
 
     def appendView(self, view):
         self.views.append(view)
+
+    def getViewByName(self, name):
+        return next(v for v in self.views if v.getViewName() == name) # TODO: Make sure View name is unique

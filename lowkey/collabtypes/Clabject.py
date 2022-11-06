@@ -9,6 +9,8 @@ __copyright__ = "Copyright 2021, GEODES"
 __credits__ = "Eugene Syriani"
 __license__ = "GPL-3.0"
 
+from ..lww.LWWVertex import LWWVertex
+
 """
 Clabject type for the general logical type model level.
 """
@@ -18,7 +20,7 @@ class Clabject(Node):
     
     def __init__(self):
         super().__init__()
-        self.persistence = LWWMap()
+        self.persistence = LWWVertex()
         self.persistence.add(Literals.ASSOCIATIONS, (), self.currentTime())  # TODO: is this still needed, or is it enough to introduce in the Entity class?
                 
     """Abstract nature"""

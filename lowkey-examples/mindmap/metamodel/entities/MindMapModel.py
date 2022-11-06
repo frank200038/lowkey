@@ -1,4 +1,5 @@
 from lowkey.collabtypes.Model import Model
+from lowkey.collabtypes.View import View
 from metamodel import MindMapPackage
 
 from .MindMap import MindMap
@@ -26,3 +27,8 @@ class MindMapModel(Model):
 
     def getMindmapsByName(self, name):
         return [c for c in self.getClabjects() if c.getType() == MindMapPackage.TYPES.MINDMAP and c.getName(name)]
+
+
+
+
+

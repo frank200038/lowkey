@@ -88,5 +88,4 @@ class Session():
         print(linkedModel.getNodes())
 
         createdView = View(typedBy=typedBy, model=linkedModel, viewName=viewName,entityName=entityName, types=types)
-        createdView.createProxyViewNode()
         linkedModel.appendView(createdView)

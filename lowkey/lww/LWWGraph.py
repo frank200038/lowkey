@@ -38,30 +38,63 @@ class LWWGraph(LWWMap):
             if edge.query("from") == vertex:
                 adjacentVertices.append(edge.query("to"))
         return adjacentVertices
-    
+
     def addVertex(self, vertex:LWWVertex, timestamp: int):
         return self.__vertices.add(vertex, timestamp)
-    
+
     """Precedence is given to this operation, as discussed in the specification."""
 
     def removeVertex(self, vertex:LWWVertex, timestamp: int):
-        if self.__vertexIsSourceOfEdge(vertex) or self.__vertexIsDestinationOfEdge(vertex):
+        if self.vertexIsSourceOfEdge(vertex) or self.vertexIsDestinationOfEdge(vertex):
             raise Exception
         else:
             self.__vertices.remove(vertex, timestamp) 
-    
-    def __vertexIsSourceOfEdge(self, vertex:LWWVertex):
+
+    def findVertexByAttr(self, attr, value):
+        for vertex, _timestamp in self.__vertices:
+            if vertex.query(attr) == value:
+                return vertex
+        return None
+
+    def getAllVertexNodes(self):
+        nodes_vertices = []
+        for vertex, _timestamp in self.__vertices:
+            if vertex.query("nodes"):
+                nodes_vertices.append(vertex.query("nodes"))
+        return nodes_vertices
+
+
+    def vertexIsSourceOfEdge(self, vertex:LWWVertex):
         for edge, _timestamp in self.__edges:
             if edge.query("from") == vertex:
                 return True
         return False
     
-    def __vertexIsDestinationOfEdge(self, vertex:LWWVertex):
+    def vertexIsDestinationOfEdge(self, vertex:LWWVertex):
         for edge, _timestamp in self.__edges:
             if edge.query("to") == vertex:
                 return True
         return False
-    
+
+    '''
+        root here means a vertex that has no incoming verticies, only outgoing ones
+    '''
+    # def returnEligibleRoots(self):
+    #     eligibleRoots = []
+    #     vertices = self.__vertices
+    #     for vertex, _ in vertices:
+    #         if not self.vertexIsDestinationOfEdge(vertex):
+    #             eligibleRoots.append(vertex)
+    #     return eligibleRoots
+
+    def getRoots(self):
+        roots = []
+        vertices = self.__vertices
+        for vertex, _ in vertices:
+            if not self.vertexIsDestinationOfEdge(vertex):
+                roots.append(vertex)
+        return roots
+
     """Interface methods: edges"""
     
     def edgeExists(self, edge) -> bool:
@@ -114,3 +147,4 @@ class LWWGraph(LWWMap):
                 return edge
             
         return None
+

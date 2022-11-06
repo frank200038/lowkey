@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
 from editor.commands.ReadCommand import ReadCommand
 from editor.commands.ReadObjectsCommand import ReadObjectsCommand
-
+from editor.commands.PrintViewCommand import PrintViewCommand
 from metamodel import MindMapPackage
 
 __author__ = "Istvan David"
@@ -25,7 +25,7 @@ __license__ = "GPL-3.0"
 class DSLParser():
     
     _globalCommands = ["CREATE-VIEW","CREATE", "LINK", "UPDATE", "DELETE"]
-    _localCommands = ["READ", "OBJECTS"]
+    _localCommands = ["READ", "OBJECTS","SHOWVIEW"]
     
     def tokenize(self, message):
         return message.split()
@@ -41,9 +41,9 @@ class DSLParser():
             return ReadCommand()
         elif commandKeyWord == "OBJECTS":
             return ReadObjectsCommand()
-        elif commandKeyWord == "Show View":
-            viewName = input("Enter the name of the view: ")
-
+        elif commandKeyWord == "SHOWVIEW":
+            viewName = str(input("Enter the name of the view: "))
+            return PrintViewCommand(viewName)
         else:
             logging.error("Unexpected command keyword.")
     
