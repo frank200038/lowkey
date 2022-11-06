@@ -2,7 +2,7 @@ from lowkey.collabtypes.Entity import Entity
 from lowkey.collabtypes.RealViewNode import RealViewNode
 from lowkey.collabtypes.ViewNode import ViewNode
 from lowkey.collabtypes import Literals, Node
-import networkx as nx
+# import networkx as nx
 
 
 class ProxyViewNode(ViewNode):

@@ -11,8 +11,8 @@ from metamodel.entities.Book import Book
 def printShop(shopClabject):
     shop = Shop(clabject = shopClabject)
 
-    print("\n Printing Shop of name {} with ID {}".format(shop.getShopName(), shop.getShopId()))
-    print("=============================================")
+    print("\nPrinting Shop of name {} with ID {}".format(shop.getShopName(), shop.getShopID()))
+    print("====================================================================================")
 
     print("This shop has the following members with details: ")
     members = shop.getMembers()
@@ -21,6 +21,8 @@ def printShop(shopClabject):
             printMember(member)
     else:
         print("No Members found")
+
+    print()
 
     print("This shop has the following employees:")
     employees = shop.getEmployees()
@@ -33,7 +35,7 @@ def printShop(shopClabject):
 def printMember(memberClabject):
     member = Member(clabject = memberClabject)
 
-    print(" Member of name {} with ID {} has the following orders:".format(member.getMemberName(), member.getMemberId()))
+    print(" Member of name {} with ID {} has the following orders:".format(member.getMemberName(), member.getMemberID()))
 
 
     orders = member.getOrders()
@@ -41,26 +43,26 @@ def printMember(memberClabject):
         for order in orders:
             printOrder(order)
     else:
-        print("No Orders found")
+        print("  No Orders found")
 
 def printOrder(orderClabject):
     order = Order(clabject = orderClabject)
 
-    print("     -- Order with ID {} with following products".format(order.getOrderId()))
+    print("     -- Order with ID {} with following products".format(order.getOrderID()))
 
     products = order.getProducts()
     if len(products) > 0:
         for product in products:
             printProduct(product)
     else:
-        print("No Products found")
+        print("      No Products found")
 
 def printProduct(productClabject):
     product = Product(clabject = productClabject)
 
-    print("         -- Product of name {} with ID {} and price {} and type {}".format(product.getProductName(), product.getProductId(), product.getPrice(), productClabject.getType()), end = " ")
+    print("         -- Product of name {} with ID {} and price {} and type {}".format(product.getProductName(), product.getProductID(), product.getPrice(), productClabject.getType()))
 
 def printEmployee(employeeClabject):
     employee = Employee(clabject = employeeClabject)
 
-    print(" Employee of name {} with ID {}".format(employee.getEmployeeName(), employee.getEmployeeId()))
+    print(" Employee of name {} with ID {}".format(employee.getEmployeeName(), employee.getEmployeeID()))

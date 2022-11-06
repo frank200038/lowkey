@@ -46,3 +46,7 @@ class Order(Entity):
             return memberAssociations[0].getFrom()
         return None
 
+    # order ID : Attribute
+    # Unique, String
+    def getOrderID(self):
+        return self.getAttribute(ShopPackage.ORDER_ID)

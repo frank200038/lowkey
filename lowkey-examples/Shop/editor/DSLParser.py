@@ -6,10 +6,10 @@ import uuid
 from lowkey.collabapi.commands.CreateClabjectCommand import CreateClabjectCommand
 from lowkey.collabtypes import Literals
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "\..")
 
-# from editor.commands.ReadCommand import ReadCommand
-# from editor.commands.ReadObjectsCommand import ReadObjectsCommand
+from Command.ReadCommand import ReadCommand
+from Command.ReadObjectsCommand import ReadObjectsCommand
 
 from metamodel import ShopPackage
 
@@ -29,16 +29,16 @@ class DSLParser():
 
     def processLocalMessage(self, message):
         pass
-    # def processLocalMessage(self, commandKeyWord):
-    #     if commandKeyWord == "READ":
-    #         return ReadCommand()
-    #     elif commandKeyWord == "OBJECTS":
-    #         return ReadObjectsCommand()
-    #     elif commandKeyWord == "Show View":
-    #         viewName = input("Enter the name of the view: ")
-    #
-    #     else:
-    #         logging.error("Unexpected command keyword.")
+    def processLocalMessage(self, commandKeyWord):
+        if commandKeyWord == "READ":
+            return ReadCommand()
+        elif commandKeyWord == "OBJECTS":
+            return ReadObjectsCommand()
+        elif commandKeyWord == "Show View":
+            viewName = input("Enter the name of the view: ")
+
+        else:
+            logging.error("Unexpected command keyword.")
 
     def translateIntoCollabAPICommand(self, message):
         tokens = self.tokenize(message)
@@ -70,17 +70,18 @@ class DSLParser():
                     return None
 
             # ID is generated randomly using uuid
+            id = str(uuid.uuid4()).replace('-', '')
             if types == ShopPackage.TYPES.SHOP and len(tokens) == 3:
-                command += ' -{} {} -{} {} -for NONE'.format(ShopPackage.SHOP_NAME, name, ShopPackage.SHOP_ID, uuid.uuid4())
+                command += ' -{} {} -{} {} -for NONE'.format(ShopPackage.SHOP_NAME, name, ShopPackage.SHOP_ID, id)
             elif types == ShopPackage.TYPES.ORDER and len(tokens) == 4:
-                command += ' -{} {} -for {}'.format(ShopPackage.ORDER_ID, uuid.uuid4(), tokens[-1])
+                command += ' -{} {} -for {}'.format(ShopPackage.ORDER_ID, id, tokens[-1])
             elif types == ShopPackage.TYPES.MEMBER and len(tokens) == 4:
-                command += ' -{} {} -{} {} -for {}'.format(ShopPackage.MEMBER_NAME, name, ShopPackage.MEMBER_ID, uuid.uuid4(), tokens[-1])
+                command += ' -{} {} -{} {} -for {}'.format(ShopPackage.MEMBER_NAME, name, ShopPackage.MEMBER_ID, id, tokens[-1])
             elif types == ShopPackage.TYPES.EMPLOYEE and len(tokens) == 4:
-                command += ' -{} {} -{} {} -for {}'.format(ShopPackage.EMPLOYEE_NAME, name, ShopPackage.EMPLOYEE_ID, uuid.uuid4(), tokens[-1])
+                command += ' -{} {} -{} {} -for {}'.format(ShopPackage.EMPLOYEE_NAME, name, ShopPackage.EMPLOYEE_ID, id, tokens[-1])
             elif len(tokens) == 5 and (
                     types == ShopPackage.TYPES.BOOK or types == ShopPackage.TYPES.CD or types == ShopPackage.TYPES.FILM):
-                command += ' -{} {} -{} {} -for {}'.format(ShopPackage.PRODUCT_NAME, name, ShopPackage.PRODUCT_ID, uuid.uuid4(), tokens[-1])
+                command += ' -{} {} -{} {} -for {}'.format(ShopPackage.PRODUCT_NAME, name, ShopPackage.PRODUCT_ID, id, tokens[-1])
             else:
                 return None
 
@@ -98,20 +99,20 @@ class DSLParser():
         # TODO : Update & Remove
 
 
-test = DSLParser()
-print(test.translateIntoCollabAPICommand("CREATE Shop Shop1"))
-print(test.translateIntoCollabAPICommand("CREATE Member Member1 Shop1"))
-print(test.translateIntoCollabAPICommand("CREATE Employee Employee1 Shop1"))
-print(test.translateIntoCollabAPICommand("CREATE Order Order1 Shop1"))
-print(test.translateIntoCollabAPICommand("CREATE Book Book1 10 Shop1"))
-print(test.translateIntoCollabAPICommand("CREATE CD CD1 10 Shop1"))
-print(test.translateIntoCollabAPICommand("CREATE Film Film1 10 Shop1"))
-print(test.translateIntoCollabAPICommand("LINK Shop1.employees TO Employee1 Shop1"))
-print(test.translateIntoCollabAPICommand("LINK Shop1.members TO Member1 Shop1"))
-print(test.translateIntoCollabAPICommand("LINK Member1.orders TO Order1 Shop1"))
-print(test.translateIntoCollabAPICommand("LINK Order1.products TO Book1 Shop1"))
-print(test.translateIntoCollabAPICommand("LINK Order1.products TO CD1 Shop1"))
-print(test.translateIntoCollabAPICommand("LINK Order1.products TO Film1 Shop1"))
+# test = DSLParser()
+# print(test.translateIntoCollabAPICommand("CREATE Shop Shop1"))
+# print(test.translateIntoCollabAPICommand("CREATE Member Member1 Shop1"))
+# print(test.translateIntoCollabAPICommand("CREATE Employee Employee1 Shop1"))
+# print(test.translateIntoCollabAPICommand("CREATE Order Order1 Shop1"))
+# print(test.translateIntoCollabAPICommand("CREATE Book Book1 10 Shop1"))
+# print(test.translateIntoCollabAPICommand("CREATE CD CD1 10 Shop1"))
+# print(test.translateIntoCollabAPICommand("CREATE Film Film1 10 Shop1"))
+# print(test.translateIntoCollabAPICommand("LINK Shop1.employees TO Employee1 Shop1"))
+# print(test.translateIntoCollabAPICommand("LINK Shop1.members TO Member1 Shop1"))
+# print(test.translateIntoCollabAPICommand("LINK Member1.orders TO Order1 Shop1"))
+# print(test.translateIntoCollabAPICommand("LINK Order1.products TO Book1 Shop1"))
+# print(test.translateIntoCollabAPICommand("LINK Order1.products TO CD1 Shop1"))
+# print(test.translateIntoCollabAPICommand("LINK Order1.products TO Film1 Shop1"))
 
 # elif tokens[0].upper() == 'CREATE':
 #     if len(tokens) == 3:

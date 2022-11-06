@@ -31,7 +31,7 @@ class Product(Entity):
     # Price: Attribute
     # Int
     def getPrice(self):
-        return self.getAttribute(ShopPackage.PRICE)
+        return self.getAttribute(ShopPackage.PRODUCT_PRICE)
 
     def setPrice(self, price):
         self.setAttribute(ShopPackage.PRODUCT_PRICE, price)

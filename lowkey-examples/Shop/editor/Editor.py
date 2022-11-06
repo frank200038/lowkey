@@ -39,6 +39,9 @@ class Editor(Client):
                 self.processMessage(message)
             except:
                 return
+            if message == b"finished_snapshot":
+                logging.debug("Received snapshot")
+                break
 
     def subscriberAction(self):
         receviedMessage = self._subscriber.recv()
@@ -86,6 +89,8 @@ class Editor(Client):
     def throwawayMessage(self, senderId):
         return senderId.replace('[', '').replace(']', '') == str(self._id)
 
+    def timeoutAction(self):
+        pass
 
 if __name__ == "__main__":
     editor = Editor()
