@@ -6,32 +6,24 @@ from lowkey.collabtypes.Clabject import Clabject
 from lowkey.collabtypes import Literals
 from lowkey.lww.LWWVertex import LWWVertex
 from lowkey.lww.LWWEdge import LWWEdge
-
+from lowkey.collabtypes.ViewPoint import ViewPoint
 
 class View(Model):
 
-    def __init__(self, typedBy, model: Model, viewName, entityName, types):
+    def __init__(self, viewPoint : ViewPoint, entityName, viewName):
         super().__init__()
-        self._typedBy = typedBy
-        self._model = model
+        self._viewPoint = viewPoint
+        self._entityName = entityName
         self._viewName = viewName
-        self._entityName = entityName  # TODO: Change to Optional
-        self._types = types
 
+        self._nodes = self.__filterNodes()
         self.__createViewGraph()
 
-
-        # self._proxyViewNode: ProxyViewNode = ProxyViewNode()
-
     '''
-    Compliance check should be enforced each clabject of each type should have unique name 
+    Compliance check should be enforced each clabject of each type should have unique name
     Ex: Cannot have two mindmap that has same name or two centralTopic of the same name.
     Advantage ? Disadvantage ?
     '''
-
-    # def _getCorrespondentClabject(self):
-    #     return [clabject for clabject in self._model.getNodes() if clabject.getName() == self._entityName and
-    #             clabject.getType() == self._typedBy][0]
     def getViewName(self):
         return self._viewName
 
@@ -41,15 +33,72 @@ class View(Model):
     def getGraph(self):
         return self.persistence
 
-
     def getRoots(self):
         return self.persistence.getRoots()
-    def getVerticesInViewByType(self, type):
-        if type in self._types:
-            return [a.getFeature(Literals.NODES) for a in self.persistence.getAllVertices() if
-                    a.getFeature(Literals.NODES).getType() == type]
+
+    def getAdjacencyListForVertex(self, vertex):
+        return self.persistence.getAdjacencyListForVertex(vertex)
+
+    def __filterNodes(self):
+        def __filterNodesRec(node):
+            nodeAssocitation = [a for a in associations if a.getFrom() == node]
+            for n in nodeAssocitation:
+                next_node = n.getTo()
+                name = next_node.getName()
+                if next_node in allNodes:
+                    filteredNodes.append(next_node)
+                __filterNodesRec(n.getTo())
+
+        filteredNodes = []
+        allNodes = self._viewPoint.getAllNodes()
+        roots = [root for root in self._viewPoint.getModelRoots() if root.getName() == self._entityName]
+        associations = self._viewPoint.getAssociations()
+
+        nodesFromRoots = [a.getTo() for a in associations if a.getFrom() in roots]
+
+        for node in nodesFromRoots:
+            name = node.getName()
+            if node in allNodes:
+                filteredNodes.append(node)
+            __filterNodesRec(node)
+
+        return filteredNodes
+
+    def __outAndInAssociationFromNodeVertices(self,vertices, node):
+        temp_entity = Entity(node)
+        outNodes = [a for a in vertices if a in
+                    list(map(lambda x: x.getFeature(Literals.ASSOCIATION_TO),
+                             temp_entity.getOutgoingAssociations()))]
+
+        inNodes = [a for a in vertices if a in
+                   list(map(lambda x: x.getFeature(Literals.ASSOCIATION_FROM),
+                            temp_entity.getIncomingAssociations()))]
+
+        return (outNodes, inNodes)
+
+    def __addEdge(self, name, fromNode, toNode):
+        self._clock.sleepOneStep()
+        edge = LWWEdge()
+        edge.add("name", name, self.currentTime())
+        edge.add("from", fromNode, self.currentTime())
+        edge.add("to", toNode, self.currentTime())
+
+        self.persistence.addEdge(edge, self.currentTime())
+
+        return edge
+
+    def __addVertex(self, node):
+        self._clock.sleepOneStep()
+        vertex = LWWVertex()
+        vertex.add(Literals.NODES, node, self.currentTime())
+
+        self._clock.sleepOneStep()
+        self.persistence.addVertex(vertex, self.currentTime())
+
+        return vertex
+
     def __createViewGraph(self):
-        nodes = self.__findAllNodes()
+        nodes = self._nodes
 
         # TODO: Better Error handling
         if len(nodes) == 0:
@@ -58,77 +107,30 @@ class View(Model):
         # TODO: Change to store ID only
         # TODO: Remove Clock mechanisme after re-organizing node CRUD Operations
         for node in nodes:
-            self._clock.sleepOneStep()
-            vertex = LWWVertex()
-            vertex.add(Literals.NODES, node, self.currentTime())
-
-            self._clock.sleepOneStep()
-            self.persistence.addVertex(vertex, self.currentTime())
+            vertex = self.__addVertex(node)
 
             vertices = self.persistence.getAllVertexNodes()
 
-            temp_entity = Entity(node)
-
-            outNodes = [a for a in vertices if a in
-                        list(map(lambda x: x.getFeature(Literals.ASSOCIATION_TO),
-                                 temp_entity.getOutgoingAssociations()))]
-
-            inNodes = [a for a in vertices if a in
-                       list(map(lambda x: x.getFeature(Literals.ASSOCIATION_FROM),
-                                temp_entity.getIncomingAssociations()))]
+            outNodes, inNodes = self.__outAndInAssociationFromNodeVertices(vertices, node)
 
             for outNode in outNodes:
                 name = node.getName() + "TO" + outNode.getName()
 
-
                 toAddOutVertex = self.persistence.findVertexByAttr(Literals.NODES, outNode)
                 if toAddOutVertex is None:
-                    self._clock.sleepOneStep()
-                    toAddOutVertex = LWWVertex()
-                    toAddOutVertex.add(Literals.NODES, outNode, self.currentTime())
+                    self.__addVertex(outNode)
 
                 if not self.persistence.edgeExistsWithName(name):
-                    self._clock.sleepOneStep()
-                    edge = LWWEdge()
-                    edge.add("name", name, self.currentTime())
-                    edge.add("from", vertex, self.currentTime())
-                    edge.add("to", toAddOutVertex, self.currentTime())
-
-                    self._clock.sleepOneStep()
-                    self.persistence.addEdge(edge, self.currentTime())
+                    self.__addEdge(name, vertex, toAddOutVertex)
 
             for inNode in inNodes:
                 name = inNode.getName() + "TO" + node.getName()
 
                 toAddInVertex = self.persistence.findVertexByAttr(Literals.NODES, inNode)
                 if toAddInVertex is None:
-                    self._clock.sleepOneStep()
-
-                    toAddInVertex = LWWVertex()
-                    toAddInVertex.add(Literals.NODES, inNode, self.currentTime())
+                    self.__addVertex(inNode)
 
                 if not self.persistence.edgeExistsWithName(name):
-                    self._clock.sleepOneStep()
-                    edge = LWWEdge()
-                    edge.add("name", name, self.currentTime())
-                    edge.add("from", toAddInVertex, self.currentTime())
-                    edge.add("to", vertex, self.currentTime())
-
-                    self._clock.sleepOneStep()
-                    self.persistence.addEdge(edge, self.currentTime())
-
-    def getAdjacencyListForVertex(self, vertex):
-        return self.persistence.getAdjacencyListForVertex(vertex)
-
-    def __findAllNodes(self):
-        nodes = []
-        if len(self._types) != 0:
-            # clabject: Clabject = self._getCorrespondentClabject()
-            for type in self._types:
-                for node in self._model.getNodesByType(type):
-                    if node.getFeature(Literals.FOR) == self._entityName:
-                        nodes.append(node)
-        return nodes
-
+                    self.__addEdge(name, toAddInVertex, vertex)
 
 

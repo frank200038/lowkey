@@ -3,7 +3,7 @@ import os
 
 from lowkey.collabapi.commands.Command import Command
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "\..")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
 from facilities import PrintHelper
 

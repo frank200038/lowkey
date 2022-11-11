@@ -23,6 +23,7 @@ class Model(Node):
         self.persistence = LWWGraph()
         self.setFeature(Literals.NODES, ())
         self.views = []
+        self.viewPoints = []
 
     # Nodes CRUD
     def addNode(self, node: Node):
@@ -72,5 +73,11 @@ class Model(Node):
     def appendView(self, view):
         self.views.append(view)
 
+    def appendViewPoint(self, viewPoint):
+        self.viewPoints.append(viewPoint)
+
     def getViewByName(self, name):
         return next(v for v in self.views if v.getViewName() == name) # TODO: Make sure View name is unique
+
+    def getViewPointByName(self, name):
+        return next(vp for vp in self.viewPoints if vp.getViewPointName() == name) #TODO: Make sure ViewPoint name is unique

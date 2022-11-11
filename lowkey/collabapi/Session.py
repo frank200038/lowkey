@@ -8,6 +8,7 @@ from lowkey.collabtypes.View import View
 from lowkey.collabtypes.Association import Association
 from lowkey.collabtypes.Clabject import Clabject
 from .Parser import Parser
+from lowkey.collabtypes.ViewPoint import ViewPoint
 
 __author__ = "Istvan David"
 __copyright__ = "Copyright 2021, GEODES"
@@ -70,22 +71,23 @@ class Session():
 
         self.integrateNode(association)
 
-    def createView(self, params):
+    def createViewPoint(self, params):
         _, typedBy = params[0]
-        _, entityName = params[1]
-        _, viewName = params[2]
-        _, typesOriginal = params[3]
+        _, viewPointName = params[1]
+        _, typesOriginal = params[2]
 
         types = re.findall(r'\{(.*?)\}', typesOriginal)[0].split(',')
 
-        # TODO: Same as mentionned above. Potentially a change.
-        for model in self.getModels():
-            print(model.getType())
-
         linkedModel = self.getModels()[0]
-        print(linkedModel)
+        createdViewPoint = ViewPoint(typedBy=typedBy, model=linkedModel, viewPointName=viewPointName, types=types)
+        linkedModel.appendViewPoint(createdViewPoint)
 
-        print(linkedModel.getNodes())
+    def applyView(self, params):
+        _, viewName = params[0]
+        _, entityName = params[1]
+        _, viewPointName = params[2]
 
-        createdView = View(typedBy=typedBy, model=linkedModel, viewName=viewName,entityName=entityName, types=types)
-        linkedModel.appendView(createdView)
+        viewPoint = self.getModels()[0].getViewPointByName(viewPointName)
+        createdView = View(viewPoint=viewPoint, entityName=entityName, viewName=viewName)
+        self.getModels()[0].appendView(createdView)
+

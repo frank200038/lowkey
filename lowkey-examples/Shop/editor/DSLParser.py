@@ -6,7 +6,7 @@ import uuid
 from lowkey.collabapi.commands.CreateClabjectCommand import CreateClabjectCommand
 from lowkey.collabtypes import Literals
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "\..")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
 from Command.ReadCommand import ReadCommand
 from Command.ReadObjectsCommand import ReadObjectsCommand
@@ -15,8 +15,8 @@ from metamodel import ShopPackage
 
 
 class DSLParser():
-    _globalCommands = ["CREATE-VIEW", "CREATE", "LINK", "UPDATE", "DELETE"]
-    _localCommands = ["READ", "OBJECTS"]
+    _globalCommands = ["APPLYVIEW","CREATEVIEWPOINT", "CREATE", "LINK", "UPDATE", "DELETE"]
+    _localCommands = ["READ", "OBJECTS","SHOWVIEW"]
 
     def tokenize(self, message):
         return message.split()
@@ -34,9 +34,9 @@ class DSLParser():
             return ReadCommand()
         elif commandKeyWord == "OBJECTS":
             return ReadObjectsCommand()
-        elif commandKeyWord == "Show View":
+        elif commandKeyWord == "SHOWVIEW":
             viewName = input("Enter the name of the view: ")
-
+            return PrintViewCommand(viewName)
         else:
             logging.error("Unexpected command keyword.")
 
@@ -45,11 +45,18 @@ class DSLParser():
 
         command = ''
 
-        # Format: CREATE-VIEW [ShopName] {[Types]} [ViewName]
-        # Format Lowkey: CREATE_VIEW -typedBy [type] -name [ShopName] -viewName [ViewName] -types {[Types]}
-        if tokens[0].upper() == 'CREATE-VIEW':
+        # Format: APPLYVIEW [EntityName] [ViewPointName] [ViewName]
+        # Format Lowkey: APPLYVIEW -name [ViewName] -applyOn [EntityName] -viewPoint [ViewPointName]
+        if tokens[0].upper() == "APPLYVIEW":
+            userCommand, entityName, viewPointName, viewName = tokens
+            command += "APPLYVIEW -name {} -applyOn {} -viewPoint {}".format(viewName, entityName, viewPointName)
+
+            return command
+        # Format: CREATEVIEW [ShopName] {[Types]} [ViewName]
+        # Format Lowkey: CREATEVIEW -typedBy [type] -name [ShopName] -viewName [ViewName] -types {[Types]}
+        elif tokens[0].upper() == 'CREATEVIEW':
             userCommand, mapName, types, viewName = tokens
-            command += 'CREATE_VIEW -{} {} -name {} -viewName {} -types {}'.format(Literals.TYPED_BY,
+            command += 'CREATEVIEW -{} {} -name {} -viewName {} -types {}'.format(Literals.TYPED_BY,
                                                                                    ShopPackage.TYPES.SHOP,
                                                                                    mapName, viewName, types)
             return command
@@ -114,20 +121,4 @@ class DSLParser():
 # print(test.translateIntoCollabAPICommand("LINK Order1.products TO CD1 Shop1"))
 # print(test.translateIntoCollabAPICommand("LINK Order1.products TO Film1 Shop1"))
 
-# elif tokens[0].upper() == 'CREATE':
-#     if len(tokens) == 3:
-#         userCommand, type, name = tokens
-#         forEntity = None
-#     else:
-#         userCommand, type, name, forEntity = tokens
-#
-#
-# elif tokens[0].upper() == 'LINK':
-#     userCommand, source, target = tokens
-#     command += 'LINK -{} {} -{} {}'.format(Literals.SOURCE, source, Literals.TARGET, target)
-# elif tokens[0].upper() == 'UPDATE':
-#     userCommand, clabjectName, attribute, value = tokens
-#     command += 'UPDATE -{} {} -{} {}'.format(Literals.CLABJECT, clabjectName, attribute, value)
-# elif tokens[0].upper() == 'DELETE':
-#     userCommand, clabjectName = tokens
-#     command += 'DELETE -{}
+
