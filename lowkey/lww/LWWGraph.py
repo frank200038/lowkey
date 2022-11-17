@@ -79,14 +79,6 @@ class LWWGraph(LWWMap):
     '''
         root here means a vertex that has no incoming verticies, only outgoing ones
     '''
-    # def returnEligibleRoots(self):
-    #     eligibleRoots = []
-    #     vertices = self.__vertices
-    #     for vertex, _ in vertices:
-    #         if not self.vertexIsDestinationOfEdge(vertex):
-    #             eligibleRoots.append(vertex)
-    #     return eligibleRoots
-
     def getRoots(self):
         roots = []
         vertices = self.__vertices

@@ -28,7 +28,7 @@ class View(Model):
         return self._viewName
 
     def getTypes(self):
-        return self._types
+        return self._viewPoint.getTypes()
 
     def getGraph(self):
         return self.persistence
@@ -38,6 +38,35 @@ class View(Model):
 
     def getAdjacencyListForVertex(self, vertex):
         return self.persistence.getAdjacencyListForVertex(vertex)
+
+    def addNewNode(self, node):
+        toAddNode = self.persistence.findVertexByAttr(Literals.NODES, node)
+        if toAddNode is None:
+            self.__addVertex(node)
+
+
+        # outNode, inNode = self.__outAndInAssociationFromNodeVertices(self.persistence.getAllVertexNodes(), node)
+        #
+        # for outNode in outNodes:
+        #     name = node.getName() + "TO" + outNode.getName()
+        #
+        #     if not self.persistence.edgeExistsWithName(name):
+        #         self.__addEdge(name, vertex, toAddOutVertex)
+        #
+        # for inNode in inNodes:
+        #     name = inNode.getName() + "TO" + node.getName()
+        #
+        #     if not self.persistence.edgeExistsWithName(name):
+        #         self.__addEdge(name, toAddInVertex, vertex)
+
+    def addNewAssociation(self, toNode, fromNode):
+        name = fromNode.getName() + "TO" + toNode.getName()
+
+        fromVertex = self.persistence.findVertexByAttr(Literals.NODES, fromNode)
+        toVertex = self.persistence.findVertexByAttr(Literals.NODES, toNode)
+
+        if not self.persistence.edgeExistsWithName(name):
+            self.__addEdge(name, fromVertex, toVertex)
 
     def __filterNodes(self):
         def __filterNodesRec(node):
@@ -76,6 +105,13 @@ class View(Model):
 
         return (outNodes, inNodes)
 
+    """
+        Internal Method: Add Edge to the graph
+     
+        :param name: Name of the edge
+        :param fromNode: Node from which the edge is coming from
+        :param toNode: Node to which the edge is going to
+    """
     def __addEdge(self, name, fromNode, toNode):
         self._clock.sleepOneStep()
         edge = LWWEdge()
@@ -98,14 +134,13 @@ class View(Model):
         return vertex
 
     def __createViewGraph(self):
+
         nodes = self._nodes
 
         # TODO: Better Error handling
         if len(nodes) == 0:
             raise Exception('No nodes found for the view')
 
-        # TODO: Change to store ID only
-        # TODO: Remove Clock mechanisme after re-organizing node CRUD Operations
         for node in nodes:
             vertex = self.__addVertex(node)
 

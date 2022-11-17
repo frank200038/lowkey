@@ -8,7 +8,7 @@ from lowkey.collabtypes import Literals
 from lowkey.collabapi.commands.CreateClabjectCommand import CreateClabjectCommand
 from lowkey.collabapi.commands.CreateAssociationCommand import CreateAssociationCommand
 from lowkey.collabapi.commands.UpdateCommand import UpdateCommand
-from lowkey.collabapi.commands.ApplyViewCommand import AddViewCommand
+from lowkey.collabapi.commands.ApplyViewCommand import ApplyViewCommand
 from lowkey.collabapi.commands.AddViewPointCommand import AddViewPointCommand
 
 __author__ = "Istvan David"

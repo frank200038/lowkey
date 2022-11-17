@@ -16,6 +16,9 @@ class ViewPoint(Model):
         self._viewPointName = viewPointName
         self._types = types
 
+    def getTypes(self):
+        return self._types
+
     def getViewPointName(self):
         return self._viewPointName
 

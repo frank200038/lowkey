@@ -10,6 +10,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
 from Command.ReadCommand import ReadCommand
 from Command.ReadObjectsCommand import ReadObjectsCommand
+from Command.PrintViewCommand import PrintViewCommand
 
 from metamodel import ShopPackage
 
@@ -52,13 +53,14 @@ class DSLParser():
             command += "APPLYVIEW -name {} -applyOn {} -viewPoint {}".format(viewName, entityName, viewPointName)
 
             return command
-        # Format: CREATEVIEW [ShopName] {[Types]} [ViewName]
-        # Format Lowkey: CREATEVIEW -typedBy [type] -name [ShopName] -viewName [ViewName] -types {[Types]}
-        elif tokens[0].upper() == 'CREATEVIEW':
-            userCommand, mapName, types, viewName = tokens
-            command += 'CREATEVIEW -{} {} -name {} -viewName {} -types {}'.format(Literals.TYPED_BY,
+
+        # Format: CREATEVIEWPOINT {[Types]} [ViewPointName]
+        # Format Lowkey: CREATEVIEWPOINT -typedBy [type] -viewPointName [ViewPointName] -types {[Types]}
+        elif tokens[0].upper() == 'CREATEVIEWPOINT':
+            userCommand, types, viewName = tokens
+            command += 'CREATEVIEWPOINT -{} {} -viewPointName {} -types {}'.format(Literals.TYPED_BY,
                                                                                    ShopPackage.TYPES.SHOP,
-                                                                                   mapName, viewName, types)
+                                                                                  viewName, types)
             return command
 
         if tokens[0].upper() == "CREATE" and len(tokens) >= 3:
@@ -78,26 +80,26 @@ class DSLParser():
 
             # ID is generated randomly using uuid
             id = str(uuid.uuid4()).replace('-', '')
-            if types == ShopPackage.TYPES.SHOP and len(tokens) == 3:
-                command += ' -{} {} -{} {} -for NONE'.format(ShopPackage.SHOP_NAME, name, ShopPackage.SHOP_ID, id)
-            elif types == ShopPackage.TYPES.ORDER and len(tokens) == 4:
-                command += ' -{} {} -for {}'.format(ShopPackage.ORDER_ID, id, tokens[-1])
-            elif types == ShopPackage.TYPES.MEMBER and len(tokens) == 4:
-                command += ' -{} {} -{} {} -for {}'.format(ShopPackage.MEMBER_NAME, name, ShopPackage.MEMBER_ID, id, tokens[-1])
-            elif types == ShopPackage.TYPES.EMPLOYEE and len(tokens) == 4:
-                command += ' -{} {} -{} {} -for {}'.format(ShopPackage.EMPLOYEE_NAME, name, ShopPackage.EMPLOYEE_ID, id, tokens[-1])
-            elif len(tokens) == 5 and (
+            if types == ShopPackage.TYPES.SHOP:
+                command += ' -{} {} -{} {}'.format(ShopPackage.SHOP_NAME, name, ShopPackage.SHOP_ID, id)
+            elif types == ShopPackage.TYPES.ORDER:
+                command += ' -{} {}'.format(ShopPackage.ORDER_ID, id)
+            elif types == ShopPackage.TYPES.MEMBER:
+                command += ' -{} {} -{} {}'.format(ShopPackage.MEMBER_NAME, name, ShopPackage.MEMBER_ID, id)
+            elif types == ShopPackage.TYPES.EMPLOYEE:
+                command += ' -{} {} -{} {}'.format(ShopPackage.EMPLOYEE_NAME, name, ShopPackage.EMPLOYEE_ID, id)
+            elif len(tokens) == 4 and (
                     types == ShopPackage.TYPES.BOOK or types == ShopPackage.TYPES.CD or types == ShopPackage.TYPES.FILM):
-                command += ' -{} {} -{} {} -for {}'.format(ShopPackage.PRODUCT_NAME, name, ShopPackage.PRODUCT_ID, id, tokens[-1])
+                command += ' -{} {} -{} {}'.format(ShopPackage.PRODUCT_NAME, name, ShopPackage.PRODUCT_ID, id)
             else:
                 return None
 
             return command
 
-        elif tokens[0].upper() == "LINK" and len(tokens) == 5:
-            userCommand, sourceAndPort, _toKeyWord, target, forEntity = tokens
+        elif tokens[0].upper() == "LINK" and len(tokens) == 4:
+            userCommand, sourceAndPort, _toKeyWord, target = tokens
             source, name = sourceAndPort.split('.')
-            command += '{} -from {} -to {} -{} {} -for {}'.format(userCommand, source, target, Literals.NAME, name,
+            command += '{} -from {} -to {} -{} {}'.format(userCommand, source, target, Literals.NAME, name,
                                                                   forEntity)
             return command
         else:

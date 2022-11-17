@@ -16,7 +16,7 @@ class PrintViewCommand(Command):
         self._viewName = viewName
 
     def execute(self, session):
-        logging.debug(" Executing command 'READ' in session {}.".format(session._id))
+        logging.debug(" Executing command 'SHOWVIEW' in session {}.".format(session._id))
         root = session.getModels()[0]
         view = root.getViewByName(self._viewName)
         printer = ViewPrintHelper(view)

@@ -1,7 +1,7 @@
 from lowkey.collabapi.commands.Command import Command
 
 
-class AddViewCommand(Command):
+class ApplyViewCommand(Command):
 
     def __init__(self, params):
         self._params = params

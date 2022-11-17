@@ -81,3 +81,19 @@ class Model(Node):
 
     def getViewPointByName(self, name):
         return next(vp for vp in self.viewPoints if vp.getViewPointName() == name) #TODO: Make sure ViewPoint name is unique
+
+    def returnViewWithType(self, *args):
+        rightView = []
+
+        for v in self.views:
+            allCorrect = True
+            types = v.getTypes()
+            for type in args:
+                if type not in types:
+                    allCorrect = False
+                    break
+
+            if allCorrect:
+                rightView.append(v)
+
+        return rightView
