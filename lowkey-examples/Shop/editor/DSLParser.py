@@ -48,6 +48,7 @@ class DSLParser():
 
         # Format: APPLYVIEW [EntityName] [ViewPointName] [ViewName]
         # Format Lowkey: APPLYVIEW -name [ViewName] -applyOn [EntityName] -viewPoint [ViewPointName]
+        # Entity name has to be the name of the node (Never change once created)
         if tokens[0].upper() == "APPLYVIEW":
             userCommand, entityName, viewPointName, viewName = tokens
             command += "APPLYVIEW -name {} -applyOn {} -viewPoint {}".format(viewName, entityName, viewPointName)
@@ -99,13 +100,18 @@ class DSLParser():
         elif tokens[0].upper() == "LINK" and len(tokens) == 4:
             userCommand, sourceAndPort, _toKeyWord, target = tokens
             source, name = sourceAndPort.split('.')
-            command += '{} -from {} -to {} -{} {}'.format(userCommand, source, target, Literals.NAME, name,
-                                                                  forEntity)
+            command += '{} -from {} -to {} -{} {}'.format(userCommand, source, target, Literals.NAME, name)
+            return command
+
+        elif tokens[0].upper() == "UPDATE" and len(tokens) == 4:
+            userCommand, clabjectName, attributeName, newValue = tokens
+            command += '{} -{} {} -{} {}'.format(userCommand, Literals.NAME, clabjectName, attributeName, newValue)
             return command
         else:
             return None
 
-        # TODO : Update & Remove
+
+        # TODO : Remove
 
 
 # test = DSLParser()

@@ -1,8 +1,5 @@
 from lowkey.collabtypes.Entity import Entity
 from lowkey.collabtypes.Model import Model
-from lowkey.collabtypes.ProxyViewNode import ProxyViewNode
-from lowkey.collabtypes.RealViewNode import RealViewNode
-from lowkey.collabtypes.Clabject import Clabject
 from lowkey.collabtypes import Literals
 from lowkey.lww.LWWVertex import LWWVertex
 from lowkey.lww.LWWEdge import LWWEdge
@@ -73,7 +70,6 @@ class View(Model):
             nodeAssocitation = [a for a in associations if a.getFrom() == node]
             for n in nodeAssocitation:
                 next_node = n.getTo()
-                name = next_node.getName()
                 if next_node in allNodes:
                     filteredNodes.append(next_node)
                 __filterNodesRec(n.getTo())

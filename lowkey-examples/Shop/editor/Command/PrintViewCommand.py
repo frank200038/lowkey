@@ -6,6 +6,11 @@ from lowkey.collabapi.commands.Command import Command
 
 
 from lowkey.lww.LWWVertex import LWWVertex
+from metamodel import ShopPackage
+from metamodel.entities.Member import Member
+from metamodel.entities.Product import Product
+from metamodel.entities.Employee import Employee
+from metamodel.entities.Order import Order
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
@@ -33,6 +38,24 @@ class ViewPrintHelper():
     def __printView(self, vertices: [LWWVertex], depth=0):
         for vertex in vertices:
             space = ' ' * depth
-            print(space + vertex.query("nodes").getName())
+            node = vertex.query("nodes")
+            name = self.__findNameOfNode(node)
+            print(space + name)
             adjacentVertices = self._view.getAdjacencyListForVertex(vertex)
             self.__printView(adjacentVertices, depth + 1)
+
+    def __findNameOfNode(self, node):
+
+        type = node.getType()
+        if type == ShopPackage.TYPES.MEMBER:
+            member = Member(clabject = node)
+            return member.getMemberName()
+        elif type == ShopPackage.TYPES.EMPLOYEE:
+            employee = Employee(clabject = node)
+            return employee.getEmployeeName()
+        elif type == ShopPackage.TYPES.ORDER:
+            order = Order(clabject = node)
+            return order.getOrderID()
+        elif type == ShopPackage.TYPES.FILM or type == ShopPackage.TYPES.CD or type == ShopPackage.TYPES.BOOK:
+            product = Product(clabject = node)
+            return product.getProductName()
