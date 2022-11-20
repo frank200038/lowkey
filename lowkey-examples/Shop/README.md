@@ -2,6 +2,8 @@
 
 ## Structure
 
+![Image](./img/shop_metamodel.png)
+
 - [/editor](./editor) - Simple command-line editor containing necessary commands to create and manipulate the Shop model.
 - [/metamodel](./metamodel) - Metamodel of Shop
 - [/facilites](./facilities) - Contains the helper function to print out a Shop model in a readable form.
