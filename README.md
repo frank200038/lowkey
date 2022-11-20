@@ -40,7 +40,9 @@ Further pointers:
 * [Reactor](https://zguide.zeromq.org/docs/chapter5/#Using-a-Reactor)
 
 ## Command language
-* ```CREATE -name {name} -typedBy {type} [-attributeName {value}]*```
-* ```LINK -from {fromClabject}.{associationName} -to {toClabject} [-attributeName {value}]*```
-* ```UPDATE (-name {name} | -id {id}) [-attributeName {newValue}]*```
-* ```DELETE (-name {name} | -id {id})```
+* ```CREATE -name [name] -typedBy [type] [-attributeName [value]]*```
+* ```LINK -from [fromClabject].[associationName] -to [toClabject] [-attributeName [value]]*```
+* ```UPDATE (-name [name] | -id [id]) [-attributeName [newValue]]*```
+* `CREATEVIEWPOINT -typedBy [type] -viewPointName [ViewPointName] -types {[Types]}`
+* `APPLYVIEW -name [ViewName] -applyOn [EntityName] -viewPoint [ViewPointName]`
+* ~~```DELETE (-name {name} | -id {id})```~~ (Not currently supported, but will be in the future)
