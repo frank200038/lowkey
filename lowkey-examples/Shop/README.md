@@ -27,7 +27,9 @@
 
 #### Global Commands
 1. `CREATE [type] [name]` - Creates an instance with name `[name]` of the domain-specific type `[type]`.
-    - Ex: `CREATE Shop Shop1`, `CREATE Product Product1`
+    - Ex: `CREATE Shop Shop1`, `CREATE Member Member1`
+    - **EXCEPTION**: Any products have an extra attribute, price
+      - EX: `CREATE FILM Film1 20`, `CREATE BOOK Book1 10`
 2. `LINK [source].[port] TO [target]` - Links object `[target]` to object `[source]` via port `[port]`.
     - Ex: `LINK Shop1.members TO Member1`, `LINK Shop1.employees TO Employee1`
 3. `UPDATE [name] [attribute] [newValue]` - Updates attribute `[attribute]` in object with `[name]` to value `[newValue]`.
