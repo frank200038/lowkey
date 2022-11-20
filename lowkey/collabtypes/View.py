@@ -10,7 +10,7 @@ class View(Model):
     Create a view of the model, governed by a correspondent ViewPoint that indicates which types of nodes should be included.
     (A subset of elements contained in the model)
 
-    View apply directly on an instance (Ex: Shop, Mindmap). Once created, view is updated everytime a new node or association is added to the model that has the type of the view.
+    View apply directly on an instance (Ex: Shop, Mindmap). Once created, view is updated everytime when the user requests to display the view
 
     Persisted as an LWWGraph. Nodes are persisted as LWWVertex, and edges as LWWEdge.
     """

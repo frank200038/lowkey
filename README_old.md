@@ -1,17 +1,23 @@
-# Lowkey enhanced with Multi-view capacity
+<img src="https://github.com/david-istvan/lowkey/blob/main/assets/lowkey-logo.png" width="200">
 
-# Repo structure
-- [/lowkey](./lowkey) - Main project.
-  -  [/collabtypes](./lowkey/collabtypes) - Type system for [collaborative modeling](#Metamodeling).
-  -  [/lww](./lowkey/lww) - Low-level [CRDT system](#CRDT-specifications).
-  -  [/network](./lowkey/network) - ZeroMQ-based distributed [network infrastructure](#Architecture-and-patterns).
-- [/lowkey-examples](./lowkey-examples) - Examples.
+A low-level and transparent framework for collaborative modeling.
+
+[![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Unit tests](https://github.com/geodes-sms/lowkey/actions/workflows/ci.yml/badge.svg)](https://github.com/geodes-sms/lowkey/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=david-istvan_lowkey&metric=alert_status)](https://sonarcloud.io/dashboard?id=david-istvan_lowkey)
+
+# Repository structure
+
+- [/lowkey](https://github.com/david-istvan/lowkey/tree/main/lowkey) - Main project.
+  -  [/collabtypes](https://github.com/david-istvan/lowkey/tree/main/lowkey/collabtypes) - Type system for [collaborative modeling](#Metamodeling).
+  -  [/lww](https://github.com/david-istvan/lowkey/tree/main/lowkey/lww) - Low-level [CRDT system](#CRDT-specifications).
+  -  [/network](https://github.com/david-istvan/lowkey/tree/main/lowkey/network) - ZeroMQ-based distributed [network infrastructure](#Architecture-and-patterns).
+- [/lowkey-examples](https://github.com/david-istvan/lowkey/tree/main/lowkey-examples) - Examples.
 
 # Setup guide
 - Clone this repository.
 - Install requirements via ```pip install -r requirements.txt```.
 - Install the framework as an editable local package via ```pip install -e [path_to_the_project]```. (Use ```pip uninstall lowkey``` if not needed anymore.)
-- To run an example included in the repository, please refer to README file present in each example located in [/lowkey-examples](./lowkey-examples).
 
 # References
 
@@ -31,9 +37,6 @@ Source: [Van Mierlo, Barroca, Vangheluwe, Syriani, Kühne. Multi-Level Modelling
 <img src="https://raw.githubusercontent.com/david-istvan/collabserver-modeling/main/docs/zmq_pattern.PNG?raw=true"/>
 
 Source: [ZMQ: Reliable Pub-Sub with Update republishing](https://zguide.zeromq.org/docs/chapter5/#Republishing-Updates-from-Clients)
-
-## Multi-view Modeling
-Source: [Cicchetti A, Ciccozzi F, Pierantonio A. Multi-view approaches for software and system modelling: A systematic suvery. Software & Systems Modeling 2019:18](https://link.springer.com/content/pdf/10.1007/s10270-018-00713-w.pdf)
 
 Further pointers:
 * [Ephemeral values](https://zguide.zeromq.org/docs/chapter5/#Ephemeral-Values)
