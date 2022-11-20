@@ -41,13 +41,7 @@ class Session():
         command.execute(self)
 
     def integrateNode(self, node):
-        # TODO: Do I need to add view as a node ?
         node.addToModel(self.getModels()[0])
-
-        views = self.getModels()[0].returnViewWithType(node.getType())
-        for view in views:
-            view.addNewNode(node)
-
 
     def integrateAssociation(self, params):
         association = Association()
@@ -75,14 +69,6 @@ class Session():
                 association.setFor(pValue)
 
         self.integrateNode(association)
-
-        toNode = association.getFeature(Literals.ASSOCIATION_TO)
-        fromNode = association.getFeature(Literals.ASSOCIATION_FROM)
-
-
-        views = self.getModels()[0].returnViewWithType(fromNode.getType(), toNode.getType())
-        for view in views:
-            view.addNewAssociation(toNode, fromNode)
 
 
     def createViewPoint(self, params):

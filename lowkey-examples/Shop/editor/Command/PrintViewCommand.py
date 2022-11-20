@@ -33,6 +33,7 @@ class ViewPrintHelper():
         self._view = view
 
     def printView(self):
+        self._view.update()
         self.__printView(self._view.getRoots())
 
     def __printView(self, vertices: [LWWVertex], depth=0):

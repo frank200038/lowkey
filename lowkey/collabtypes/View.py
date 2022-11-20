@@ -21,7 +21,7 @@ class View(Model):
         self._viewName = viewName
 
         self._nodes = self.__filterNodes()
-        self.__createViewGraph()
+        self.__createViewGraph(self._nodes)
 
     '''
     Compliance check should be enforced each clabject of each type should have unique name
@@ -68,6 +68,19 @@ class View(Model):
         if not self.persistence.edgeExistsWithName(name):
             self.__addEdge(name, fromVertex, toVertex)
 
+    def update(self):
+        """
+        Update the view by adding new nodes and associations
+        """
+
+        originalNodes = self._nodes.copy()
+        self._nodes = self.__filterNodes()
+
+        newNodes = [node for node in self._nodes if node not in originalNodes]
+
+        if len(newNodes) != 0:
+            self.__createViewGraph(newNodes)
+
     def __filterNodes(self):
         """
         Filter nodes that only belongs to the entity specified in the View
@@ -90,7 +103,7 @@ class View(Model):
         filteredNodes = []
         allNodes = self._viewPoint.getAllNodes() # All nodes from the model that conforms to the type specified in the ViewPoint
         roots = [root for root in self._viewPoint.getModelRoots() if root.getName() == self._entityName] # Get the root of the entity on which the view is applied
-        associations = self._viewPoint.getAssociations()
+        associations = self._viewPoint.getAssociations() # Get all associations present in the model (To be filtered)
 
         nodesFromRoots = [a.getTo() for a in associations if a.getFrom() in roots] # Filter the associations that stem from the roots
 
@@ -159,15 +172,15 @@ class View(Model):
 
         return vertex
 
-    def __createViewGraph(self):
+    def __createViewGraph(self, nodes=[]):
         """
         Internal Methode: Create graph that contains nodes that belong to the entity and conform to the type specified in the ViewPoint
 
         Nodes and associations are persisted as LWWVertex and LWWEdge respectively
-        """
-        nodes = self._nodes
 
-        # TODO: Better Error handling
+        :param nodes: List of nodes to be added to the graph
+        """
+
         if len(nodes) == 0:
             print("No nodes found for the entity for now")
             return
