@@ -76,18 +76,43 @@ class Session():
         _, viewPointName = params[1]
         _, typesOriginal = params[2]
 
-        types = re.findall(r'\{(.*?)\}', typesOriginal)[0].split(',') # Regex to seperate types enclosed in {}
+        if self.__ifViewPointNameExists(viewPointName):
+            print("ViewPoint {} already exists".format(viewPointName))
+            return
+        else:
+            types = re.findall(r'\{(.*?)\}', typesOriginal)[0].split(',') # Regex to seperate types enclosed in {}
 
-        linkedModel = self.getModels()[0]
-        createdViewPoint = ViewPoint(typedBy=typedBy, model=linkedModel, viewPointName=viewPointName, types=types)
-        linkedModel.appendViewPoint(createdViewPoint)
+            linkedModel = self.getModels()[0]
+            createdViewPoint = ViewPoint(typedBy=typedBy, model=linkedModel, viewPointName=viewPointName, types=types)
+            linkedModel.appendViewPoint(createdViewPoint)
 
     def applyView(self, params):
         _, viewName = params[0]
         _, entityName = params[1]
         _, viewPointName = params[2]
 
-        viewPoint = self.getModels()[0].getViewPointByName(viewPointName)
-        createdView = View(viewPoint=viewPoint, entityName=entityName, viewName=viewName)
-        self.getModels()[0].appendView(createdView)
+        if self.__ifViewNameExists(viewName):
+            print("View {} already exists".format(viewName))
+            return
+        else:
+            viewPoint = self.getModels()[0].getViewPointByName(viewPointName)
+
+            if viewPoint is not None:
+                try:
+                    createdView = View(viewPoint=viewPoint, entityName=entityName, viewName=viewName)
+                    self.getModels()[0].appendView(createdView)
+                except Exception as e:
+                    print("Error while applying view: {}".format(e))
+            else:
+                print("ViewPoint {} not found".format(viewPointName))
+
+    def __ifViewNameExists(self, viewName):
+        linkedModel = self.getModels()[0]
+        view = linkedModel.getViewByName(viewName)
+        return view is not None
+
+    def __ifViewPointNameExists(self, viewPointName):
+        linkedModel = self.getModels()[0]
+        viewPoint = linkedModel.getViewPointByName(viewPointName)
+        return viewPoint is not None
 

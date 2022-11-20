@@ -23,9 +23,15 @@ class PrintViewCommand(Command):
     def execute(self, session):
         # logging.debug(" Executing command 'SHOWVIEW' in session {}.".format(session._id))
         root = session.getModels()[0]
+
         view = root.getViewByName(self._viewName)
-        printer = ViewPrintHelper(view)
-        printer.printView()
+
+        if view is None:
+            print("View not found")
+            return
+        else:
+            printer = ViewPrintHelper(view)
+            printer.printView()
 
 class ViewPrintHelper():
 

@@ -77,10 +77,12 @@ class Model(Node):
         self.viewPoints.append(viewPoint)
 
     def getViewByName(self, name):
-        return next(v for v in self.views if v.getViewName() == name) # TODO: Make sure View name is unique
+        views = [v for v in self.views if v.getViewName() == name]
+        return None if len(views) == 0 else views[0]
 
     def getViewPointByName(self, name):
-        return next(vp for vp in self.viewPoints if vp.getViewPointName() == name) #TODO: Make sure ViewPoint name is unique
+        viewPoints = [v for v in self.viewPoints if v.getViewPointName() == name]
+        return None if len(viewPoints) == 0 else viewPoints[0]
 
     def returnViewWithType(self, *args):
         """

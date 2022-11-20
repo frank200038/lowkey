@@ -19,12 +19,26 @@
 
 **Commands are case-sensitive.**
 
+#### Local Commands
 1. `READ` - Returns the Shop model in a readable form.
 2. `OBJECTS` - Lists every object in the local session.
-3. `CREATE [type] [name]` - Creates an instance with name `[name]` of the domain-specific type `[type]`.
+
+#### Global Commands
+1. `CREATE [type] [name]` - Creates an instance with name `[name]` of the domain-specific type `[type]`.
     - Ex: `CREATE Shop Shop1`, `CREATE Product Product1`
-4. `LINK [source].[port] TO [target]` - Links object `[target]` to object `[source]` via port `[port]`.
+2. `LINK [source].[port] TO [target]` - Links object `[target]` to object `[source]` via port `[port]`.
     - Ex: `LINK Shop1.members TO Member1`, `LINK Shop1.employees TO Employee1`
-5. `UPDATE [name] [attribute] [newValue]` - Updates attribute `[attribute]` in object with `[name]` to value `[newValue]`.
+3. `UPDATE [name] [attribute] [newValue]` - Updates attribute `[attribute]` in object with `[name]` to value `[newValue]`.
     - Ex: `UPDATE Shop1 shopName Shop2`, `UPDATE Film1 price 20`
+4. `CREATEVIEWPOINT {[Types]} [ViewPointName]` - Create a view point with name `[ViewPointName]` and types `{[Types]}`.
+    - Ex: `CREATEVIEWPOINT {Employee, Members} EmployeeMemberViewPoint` (ViewPoint will only contain nodes from Shop model that are either Employee or Member)
+5. `APPLYVIEW [EntityName] [ViewPointName] [ViewName]` - Apply view point `[ViewPointName]` to entity `[EntityName]` and name the view `[ViewName]`.
+    - Ex: `APPLYVIEW Shop1 EmployeeMemberViewPoint EmployeeMemberView` (View will only contain nodes from Shop1 that are either Employee or Member)
+    - **IMPORTANT**: In the above example, it is imperative to assure that `Shop1` and `EmployeeMemberViewPoint` exist
 6. ~~`DELETE [name]` - Deletes object `[name]`~~ (Not currently supported, but will be in the future)
+
+#### General remarks
+
+Local commands will not be sent to the server. Thus they will not be recorded or broadcasted to other clients. 
+
+Global commands will be sent to the server and will be recorded and broadcasted to other clients. **With the exception of `CREATEVIEWPOINT` and `APPLYVIEW` which will not be broadcasted to other clients.**

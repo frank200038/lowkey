@@ -103,6 +103,10 @@ class View(Model):
         filteredNodes = []
         allNodes = self._viewPoint.getAllNodes() # All nodes from the model that conforms to the type specified in the ViewPoint
         roots = [root for root in self._viewPoint.getModelRoots() if root.getName() == self._entityName] # Get the root of the entity on which the view is applied
+
+        if len(roots) == 0:
+            raise Exception("Entity not found")
+
         associations = self._viewPoint.getAssociations() # Get all associations present in the model (To be filtered)
 
         nodesFromRoots = [a.getTo() for a in associations if a.getFrom() in roots] # Filter the associations that stem from the roots
