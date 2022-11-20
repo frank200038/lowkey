@@ -22,6 +22,8 @@
 #### Local Commands
 1. `READ` - Returns the Shop model in a readable form.
 2. `OBJECTS` - Lists every object in the local session.
+3. `SHOWVIEW` - Present the view of the model in a readable form (With nodes conformed to the types specified in correspondent ViewPoint)
+   - User will be prompted to enter the name of the `View`
 
 #### Global Commands
 1. `CREATE [type] [name]` - Creates an instance with name `[name]` of the domain-specific type `[type]`.
@@ -34,7 +36,6 @@
     - Ex: `CREATEVIEWPOINT {Employee, Members} EmployeeMemberViewPoint` (ViewPoint will only contain nodes from Shop model that are either Employee or Member)
 5. `APPLYVIEW [EntityName] [ViewPointName] [ViewName]` - Apply view point `[ViewPointName]` to entity `[EntityName]` and name the view `[ViewName]`.
     - Ex: `APPLYVIEW Shop1 EmployeeMemberViewPoint EmployeeMemberView` (View will only contain nodes from Shop1 that are either Employee or Member)
-    - **IMPORTANT**: In the above example, it is imperative to assure that `Shop1` and `EmployeeMemberViewPoint` exist
 6. ~~`DELETE [name]` - Deletes object `[name]`~~ (Not currently supported, but will be in the future)
 
 #### General remarks
