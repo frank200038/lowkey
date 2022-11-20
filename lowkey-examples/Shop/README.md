@@ -33,7 +33,8 @@
 3. `UPDATE [name] [attribute] [newValue]` - Updates attribute `[attribute]` in object with `[name]` to value `[newValue]`.
     - Ex: `UPDATE Shop1 shopName Shop2`, `UPDATE Film1 price 20`
 4. `CREATEVIEWPOINT {[Types]} [ViewPointName]` - Create a view point with name `[ViewPointName]` and types `{[Types]}`.
-    - Ex: `CREATEVIEWPOINT {Employee, Members} EmployeeMemberViewPoint` (ViewPoint will only contain nodes from Shop model that are either Employee or Member)
+    - Ex: `CREATEVIEWPOINT {Employee,Members} EmployeeMemberViewPoint` (ViewPoint will only contain nodes from Shop model that are either Employee or Member)
+    - **IMPORTANT**: NO SPACE BETWEEN TYPES. EX: `{Employee,Member}` NOT `{Employee, Member}`
 5. `APPLYVIEW [EntityName] [ViewPointName] [ViewName]` - Apply view point `[ViewPointName]` to entity `[EntityName]` and name the view `[ViewName]`.
     - Ex: `APPLYVIEW Shop1 EmployeeMemberViewPoint EmployeeMemberView` (View will only contain nodes from Shop1 that are either Employee or Member)
 6. ~~`DELETE [name]` - Deletes object `[name]`~~ (Not currently supported, but will be in the future)

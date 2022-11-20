@@ -68,7 +68,7 @@ class ViewPrintHelper():
             return employee.getEmployeeName()
         elif type == ShopPackage.TYPES.ORDER:
             order = Order(clabject = node)
-            return order.getOrderID()
+            return order.getOrderName()
         elif type == ShopPackage.TYPES.FILM or type == ShopPackage.TYPES.CD or type == ShopPackage.TYPES.BOOK:
             product = Product(clabject = node)
             return product.getProductName()
