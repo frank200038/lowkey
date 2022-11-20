@@ -32,6 +32,9 @@ class ViewPoint(Model):
     def getAssociations(self):
         return self._model.getAssociations()
 
+    def getViewPointName(self):
+        return self._viewPointName
+
     def __findAllNodes(self):
         """
         Returns all nodes of the model that are of the specified type. SuperType is supported as well.

@@ -18,13 +18,13 @@ class ReadObjectsCommand(Command):
         print("------------------------------------------")
         if views:
             for v in views:
-                print(v.getViewName(), v)
+                print(v.getViewName(), v, " Linked To VP: ", v.getViewPointName())
         else:
             print("No views in the model yet")
 
         print("------------------------------------------")
         if viewPoints:
             for vp in viewPoints:
-                print(vp.getViewPointName(), vp)
+                print(vp.getViewPointName(), vp, " with types: ", vp.getTypes())
         else:
             print("No view points in the model yet")

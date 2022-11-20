@@ -40,6 +40,9 @@ class View(Model):
     def getRoots(self):
         return self.persistence.getRoots()
 
+    def getViewPointName(self):
+        return self._viewPoint.getViewPointName()
+
     def getAdjacencyListForVertex(self, vertex):
         return self.persistence.getAdjacencyListForVertex(vertex)
 
