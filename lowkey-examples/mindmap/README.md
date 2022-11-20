@@ -1,5 +1,7 @@
 # Mindmap example
 
+**NOT MAINTAINED ANYMORE! PLEASE EXECUTE SHOP EXAMPLE INSTEAD!**
+
 ## Structure
 
 - [/metamodel](https://github.com/david-istvan/lowkey-examples/mindmap/metamodel) - Metamodel.
