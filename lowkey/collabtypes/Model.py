@@ -48,6 +48,10 @@ class Model(Node):
         nodes = self.getNodes()
         return [n for n in nodes if n.getType() == name]  # assumes no multi-typing
 
+    def getNodesBySuperType(self, name: str):
+        nodes = self.getNodes()
+        return [n for n in nodes if n.getSuperType() == name]
+
     def removeNode(self, node: Node):
         nodes = self.getFeature(Literals.NODES)
         remainingNodes = ()

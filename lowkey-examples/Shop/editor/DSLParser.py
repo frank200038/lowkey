@@ -69,6 +69,7 @@ class DSLParser():
             types = tokens[1]
             name = tokens[2]
 
+
             command += '{} -{} {} -{} {}'.format(userCommand, Literals.TYPED_BY, types, Literals.NAME, name)
 
             # Special : Product has a price
@@ -91,7 +92,7 @@ class DSLParser():
                 command += ' -{} {} -{} {}'.format(ShopPackage.EMPLOYEE_NAME, name, ShopPackage.EMPLOYEE_ID, id)
             elif len(tokens) == 4 and (
                     types == ShopPackage.TYPES.BOOK or types == ShopPackage.TYPES.CD or types == ShopPackage.TYPES.FILM):
-                command += ' -{} {} -{} {}'.format(ShopPackage.PRODUCT_NAME, name, ShopPackage.PRODUCT_ID, id)
+                command += ' -{} {} -{} {} -{} {}'.format(ShopPackage.PRODUCT_NAME, name, ShopPackage.PRODUCT_ID, id, Literals.SUPER_TYPED_BY, ShopPackage.TYPES.PRODUCT)
             else:
                 return None
 

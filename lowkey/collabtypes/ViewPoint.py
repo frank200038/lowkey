@@ -34,13 +34,20 @@ class ViewPoint(Model):
 
     def __findAllNodes(self):
         """
-        Returns all nodes of the model that are of the specified type
+        Returns all nodes of the model that are of the specified type. SuperType is supported as well.
 
         :return: List of nodes of the model that are of the specified type
         """
-        nodes = []
+        nodes_list = []
         if len(self._types) != 0:
             for type in self._types:
-                for node in self._model.getNodesByType(type):
-                        nodes.append(node)
-        return nodes
+                nodes = self._model.getNodesByType(type)
+                if len(nodes) != 0:
+                    nodes_list.extend(nodes)
+                else:
+                    nodes = self._model.getNodesBySuperType(type)
+                    if len(nodes) != 0:
+                        nodes_list.extend(nodes)
+                    else:
+                        continue
+        return nodes_list

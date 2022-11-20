@@ -51,6 +51,9 @@ class Node():
     
     def getType(self):
         return self.getFeature(Literals.TYPED_BY)
+
+    def getSuperType(self):
+        return self.getFeature(Literals.SUPER_TYPED_BY)
     
     """Model CRUD"""
 

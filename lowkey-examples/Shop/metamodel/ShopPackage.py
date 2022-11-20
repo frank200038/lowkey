@@ -6,7 +6,8 @@ class TYPES():
     CD = "CD"
     FILM = "Film"
     ORDER = "Order"
-    TYPES = [SHOP, MEMBER, EMPLOYEE, BOOK, CD, FILM, ORDER]
+    PRODUCT = "Product"
+    TYPES = [SHOP, MEMBER, EMPLOYEE, BOOK, CD, FILM, ORDER, PRODUCT]
 
 TITLE = "title"
 
