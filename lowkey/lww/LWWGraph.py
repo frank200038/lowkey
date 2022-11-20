@@ -51,12 +51,24 @@ class LWWGraph(LWWMap):
             self.__vertices.remove(vertex, timestamp) 
 
     def findVertexByAttr(self, attr, value):
+        """
+        Find a vertex by attribute, and return its encapsulated value
+
+        :param attr: Attribute to search for
+        :param value: value to verify against
+        :return: The vertex that contains the attribute and value
+        """
         for vertex, _timestamp in self.__vertices:
             if vertex.query(attr) == value:
                 return vertex
         return None
 
     def getAllVertexNodes(self):
+        """
+        Get all verticies with that contains a node
+
+        :return: List of vertices that contain a node
+        """
         nodes_vertices = []
         for vertex, _timestamp in self.__vertices:
             if vertex.query("nodes"):
@@ -76,10 +88,12 @@ class LWWGraph(LWWMap):
                 return True
         return False
 
-    '''
-        root here means a vertex that has no incoming verticies, only outgoing ones
-    '''
     def getRoots(self):
+        """
+        Return a list of vertices that have no incoming edges (roots)
+
+        :return: List of vertices
+        """
         roots = []
         vertices = self.__vertices
         for vertex, _ in vertices:

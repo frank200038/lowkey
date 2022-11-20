@@ -83,6 +83,12 @@ class Model(Node):
         return next(vp for vp in self.viewPoints if vp.getViewPointName() == name) #TODO: Make sure ViewPoint name is unique
 
     def returnViewWithType(self, *args):
+        """
+        Returns a view of the model with the given type(s)
+
+        :param args: Type(s) that are required to be present in a view
+        :return: List of views that contain the given type(s)
+        """
         rightView = []
 
         for v in self.views:
@@ -97,3 +103,9 @@ class Model(Node):
                 rightView.append(v)
 
         return rightView
+
+    def getViews(self):
+        return self.views.copy()
+
+    def getViewPoints(self):
+        return self.viewPoints.copy()

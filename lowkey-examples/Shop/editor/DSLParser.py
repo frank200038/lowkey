@@ -111,22 +111,5 @@ class DSLParser():
             return None
 
 
-        # TODO : Remove
-
-
-# test = DSLParser()
-# print(test.translateIntoCollabAPICommand("CREATE Shop Shop1"))
-# print(test.translateIntoCollabAPICommand("CREATE Member Member1 Shop1"))
-# print(test.translateIntoCollabAPICommand("CREATE Employee Employee1 Shop1"))
-# print(test.translateIntoCollabAPICommand("CREATE Order Order1 Shop1"))
-# print(test.translateIntoCollabAPICommand("CREATE Book Book1 10 Shop1"))
-# print(test.translateIntoCollabAPICommand("CREATE CD CD1 10 Shop1"))
-# print(test.translateIntoCollabAPICommand("CREATE Film Film1 10 Shop1"))
-# print(test.translateIntoCollabAPICommand("LINK Shop1.employees TO Employee1 Shop1"))
-# print(test.translateIntoCollabAPICommand("LINK Shop1.members TO Member1 Shop1"))
-# print(test.translateIntoCollabAPICommand("LINK Member1.orders TO Order1 Shop1"))
-# print(test.translateIntoCollabAPICommand("LINK Order1.products TO Book1 Shop1"))
-# print(test.translateIntoCollabAPICommand("LINK Order1.products TO CD1 Shop1"))
-# print(test.translateIntoCollabAPICommand("LINK Order1.products TO Film1 Shop1"))
-
+        #TODO : Remove
 

@@ -6,7 +6,14 @@ from lowkey.lww.LWWEdge import LWWEdge
 from lowkey.collabtypes.ViewPoint import ViewPoint
 
 class View(Model):
+    """
+    Create a view of the model, governed by a correspondent ViewPoint that indicates which types of nodes should be included.
+    (A subset of elements contained in the model)
 
+    View apply directly on an instance (Ex: Shop, Mindmap). Once created, view is updated everytime a new node or association is added to the model that has the type of the view.
+
+    Persisted as an LWWGraph. Nodes are persisted as LWWVertex, and edges as LWWEdge.
+    """
     def __init__(self, viewPoint : ViewPoint, entityName, viewName):
         super().__init__()
         self._viewPoint = viewPoint
@@ -37,26 +44,22 @@ class View(Model):
         return self.persistence.getAdjacencyListForVertex(vertex)
 
     def addNewNode(self, node):
+        """
+        Add a new node to the view (Used for updating the view)
+
+        :param node: node to be added
+        """
         toAddNode = self.persistence.findVertexByAttr(Literals.NODES, node)
         if toAddNode is None:
             self.__addVertex(node)
 
-
-        # outNode, inNode = self.__outAndInAssociationFromNodeVertices(self.persistence.getAllVertexNodes(), node)
-        #
-        # for outNode in outNodes:
-        #     name = node.getName() + "TO" + outNode.getName()
-        #
-        #     if not self.persistence.edgeExistsWithName(name):
-        #         self.__addEdge(name, vertex, toAddOutVertex)
-        #
-        # for inNode in inNodes:
-        #     name = inNode.getName() + "TO" + node.getName()
-        #
-        #     if not self.persistence.edgeExistsWithName(name):
-        #         self.__addEdge(name, toAddInVertex, vertex)
-
     def addNewAssociation(self, toNode, fromNode):
+        """
+        Add a new association to the view (Used for updating the view)
+
+        :param toNode: Node where the association is pointing to
+        :param fromNode: Node where the association is pointing from
+        """
         name = fromNode.getName() + "TO" + toNode.getName()
 
         fromVertex = self.persistence.findVertexByAttr(Literals.NODES, fromNode)
@@ -66,49 +69,70 @@ class View(Model):
             self.__addEdge(name, fromVertex, toVertex)
 
     def __filterNodes(self):
+        """
+        Filter nodes that only belongs to the entity specified in the View
+
+        :return: List of nodes that belongs to the entity
+        """
         def __filterNodesRec(node):
-            nodeAssocitation = [a for a in associations if a.getFrom() == node]
+            """
+            Recursively filter nodes
+
+            :param node: node to be recursively filtered
+            """
+            nodeAssocitation = [a for a in associations if a.getFrom() == node] # Get all associations that has the node as the from node
             for n in nodeAssocitation:
                 next_node = n.getTo()
-                if next_node in allNodes:
-                    filteredNodes.append(next_node)
-                __filterNodesRec(n.getTo())
+                if next_node in allNodes: # If the current node is indeed present among all nodes having conformed types
+                    filteredNodes.append(next_node) # Add the node to the filtered nodes
+                __filterNodesRec(n.getTo()) # Otherwise, go to the next node and repeat the process
 
         filteredNodes = []
-        allNodes = self._viewPoint.getAllNodes()
-        roots = [root for root in self._viewPoint.getModelRoots() if root.getName() == self._entityName]
+        allNodes = self._viewPoint.getAllNodes() # All nodes from the model that conforms to the type specified in the ViewPoint
+        roots = [root for root in self._viewPoint.getModelRoots() if root.getName() == self._entityName] # Get the root of the entity on which the view is applied
         associations = self._viewPoint.getAssociations()
 
-        nodesFromRoots = [a.getTo() for a in associations if a.getFrom() in roots]
+        nodesFromRoots = [a.getTo() for a in associations if a.getFrom() in roots] # Filter the associations that stem from the roots
 
         for node in nodesFromRoots:
-            name = node.getName()
             if node in allNodes:
                 filteredNodes.append(node)
             __filterNodesRec(node)
 
         return filteredNodes
 
-    def __outAndInAssociationFromNodeVertices(self,vertices, node):
-        temp_entity = Entity(node)
-        outNodes = [a for a in vertices if a in
+    def __outAndInAssociationFromNodeVertices(self,vertices_node, node):
+        """
+        Interal auxiliary function to facilite the search of associations that has one end linked to a node already present in the graph
+
+        :param vertices_node: List of nodes that are encapsulated in vertices
+        :param node: Node to be searched
+        :return: List of associations that has one end linked to (or from) a node already present in the graph
+        """
+        temp_entity = Entity(node) # To acheieve easily all the associations linked with the node
+
+        # Nodes that are present in the graph and are connecting FROM the node
+        outNodes = [a for a in vertices_node if a in
                     list(map(lambda x: x.getFeature(Literals.ASSOCIATION_TO),
                              temp_entity.getOutgoingAssociations()))]
 
-        inNodes = [a for a in vertices if a in
+        # Nodes that are present in the graph and are connecting TO the node
+        inNodes = [a for a in vertices_node if a in
                    list(map(lambda x: x.getFeature(Literals.ASSOCIATION_FROM),
                             temp_entity.getIncomingAssociations()))]
 
         return (outNodes, inNodes)
 
-    """
-        Internal Method: Add Edge to the graph
-     
-        :param name: Name of the edge
-        :param fromNode: Node from which the edge is coming from
-        :param toNode: Node to which the edge is going to
-    """
+
     def __addEdge(self, name, fromNode, toNode):
+        """
+                Internal helper Method: Add Edge to the graph
+
+                :param name: Name of the edge
+                :param fromNode: Node from which the edge is coming from
+                :param toNode: Node to which the edge is going to
+                :return: Added edge
+        """
         self._clock.sleepOneStep()
         edge = LWWEdge()
         edge.add("name", name, self.currentTime())
@@ -120,6 +144,12 @@ class View(Model):
         return edge
 
     def __addVertex(self, node):
+        """
+        Internal helper Method: Add Vertex to the graph
+
+        :param node: Node to be encapsulated in the vertex
+        :return: Added vertex
+        """
         self._clock.sleepOneStep()
         vertex = LWWVertex()
         vertex.add(Literals.NODES, node, self.currentTime())
@@ -130,19 +160,24 @@ class View(Model):
         return vertex
 
     def __createViewGraph(self):
+        """
+        Internal Methode: Create graph that contains nodes that belong to the entity and conform to the type specified in the ViewPoint
 
+        Nodes and associations are persisted as LWWVertex and LWWEdge respectively
+        """
         nodes = self._nodes
 
         # TODO: Better Error handling
         if len(nodes) == 0:
-            raise Exception('No nodes found for the view')
+            print("No nodes found for the entity for now")
+            return
 
         for node in nodes:
             vertex = self.__addVertex(node)
 
-            vertices = self.persistence.getAllVertexNodes()
+            verticies_node = self.persistence.getAllVertexNodes()
 
-            outNodes, inNodes = self.__outAndInAssociationFromNodeVertices(vertices, node)
+            outNodes, inNodes = self.__outAndInAssociationFromNodeVertices(verticies_node, node)
 
             for outNode in outNodes:
                 name = node.getName() + "TO" + outNode.getName()

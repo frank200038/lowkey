@@ -61,8 +61,8 @@ class Session():
             pValue = param[1]
             logging.debug("Executing command 'assocation.setFeature({}, {})'.".format(pName, pValue))
 
-            # TODO : Maybe require a change (In case of multiple model value) ???
-            # TODO: Enforce check. No association with different entity (Addition of FOR keyword)
+            #TODO : Maybe require a change (In case of multiple model value) ???
+            #TODO: Enforce check. No association with different entity (Addition of FOR keyword)
             if pName == Literals.ASSOCIATION_FROM:
                 fromClabject = self.getModels()[0].getNodeByName(pValue)
                 association.setFrom(fromClabject)
@@ -90,7 +90,7 @@ class Session():
         _, viewPointName = params[1]
         _, typesOriginal = params[2]
 
-        types = re.findall(r'\{(.*?)\}', typesOriginal)[0].split(',')
+        types = re.findall(r'\{(.*?)\}', typesOriginal)[0].split(',') # Regex to seperate types enclosed in {}
 
         linkedModel = self.getModels()[0]
         createdViewPoint = ViewPoint(typedBy=typedBy, model=linkedModel, viewPointName=viewPointName, types=types)

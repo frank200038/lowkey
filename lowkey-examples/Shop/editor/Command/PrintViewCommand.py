@@ -21,7 +21,7 @@ class PrintViewCommand(Command):
         self._viewName = viewName
 
     def execute(self, session):
-        logging.debug(" Executing command 'SHOWVIEW' in session {}.".format(session._id))
+        # logging.debug(" Executing command 'SHOWVIEW' in session {}.".format(session._id))
         root = session.getModels()[0]
         view = root.getViewByName(self._viewName)
         printer = ViewPrintHelper(view)
@@ -36,6 +36,12 @@ class ViewPrintHelper():
         self.__printView(self._view.getRoots())
 
     def __printView(self, vertices: [LWWVertex], depth=0):
+        """
+        Prints the view in a tree-like structure (Recursively)
+
+        :param vertices: vertices contained at the current depth in the tree
+        :param depth: Depth of the tree, used to indent the print
+        """
         for vertex in vertices:
             space = ' ' * depth
             node = vertex.query("nodes")

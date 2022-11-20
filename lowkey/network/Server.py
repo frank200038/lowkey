@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import logging
-
+import chardet
 import zmq
 
 from lowkey.network.Memory import Memory
@@ -52,14 +52,27 @@ class Server():
             # PULLed messages PUBLISHED by the clients
             if self._collector in items:
                 message = self._collector.recv()
-                logging.debug("Saving message: {}".format(message))
-                self._memory.saveMessage(message)
-                logging.debug("Publishing update")
-                self._publisher.send(message)
+
+                decoding = chardet.detect(message)['encoding']
+
+                send = True
+
+                if decoding is not None:
+                    tokenized = message.decode(decoding).split(' ')
+                    if tokenized[1] == 'CREATEVIEWPOINT' or tokenized[1] == 'APPLYVIEW':
+                        send = False
+                print(message.decode(decoding))
+                if send:
+                    print("Saving message: {}".format(message))
+                    logging.debug("Saving message: {}".format(message))
+                    self._memory.saveMessage(message)
+                    logging.debug("Publishing update")
+                    self._publisher.send(message)
             
             # snapshot requests by joining clients
             if self._snapshot in items:
                 message = self._snapshot.recv_multipart()
+                print("snapshot", message)
                 identity = message[0]
                 request = message[1]
                 logging.debug("Identity: {}".format(identity))
@@ -72,7 +85,7 @@ class Server():
     
                 for message in self._memory.getMessages():
                     self._snapshot.send(identity, zmq.SNDMORE)
-                    logging.debug("Sending message {}".format(message))
+                    print("Sending message {}".format(message))
                     self._snapshot.send(message)
     
                 logging.debug("Sent state shapshot")
