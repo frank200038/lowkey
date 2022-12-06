@@ -36,10 +36,12 @@
     - Ex: `UPDATE Shop1 shopName Shop2`, `UPDATE Film1 price 20`
 4. `CREATEVIEWPOINT {[Types]} [ViewPointName]` - Create a view point with name `[ViewPointName]` and types `{[Types]}`.
     - Ex: `CREATEVIEWPOINT {Employee,Members} EmployeeMemberViewPoint` (ViewPoint will only contain nodes from Shop model that are either Employee or Member)
-    - **IMPORTANT**: NO SPACE BETWEEN TYPES. EX: `{Employee,Member}` NOT `{Employee, Member}`
+    - > **IMPORTANT**: NO SPACE BETWEEN TYPES. EX: `{Employee,Member}` **NOT** `{Employee, Member}`
 5. `APPLYVIEW [EntityName] [ViewPointName] [ViewName]` - Apply view point `[ViewPointName]` to entity `[EntityName]` and name the view `[ViewName]`.
     - Ex: `APPLYVIEW Shop1 EmployeeMemberViewPoint EmployeeMemberView` (View will only contain nodes from Shop1 that are either Employee or Member)
-6. ~~`DELETE [name]` - Deletes object `[name]`~~ (Not currently supported, but will be in the future)
+6. `UPDATEVPTYPE [ViewPointName] {[Types]}` - Update the list of the types specified in the given ViewPoint
+   - Ex: `UPDATEVPTYPE VP1 {Member,Film}` (The specified types in VP1 will now be modified to Member and Film)
+7. ~~`DELETE [name]` - Deletes object `[name]`~~ (Not currently supported, but will be in the future)
 
 #### General remarks
 

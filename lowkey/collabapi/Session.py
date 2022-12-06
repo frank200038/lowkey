@@ -105,7 +105,23 @@ class Session():
                     print("Error while applying view: {}".format(e))
             else:
                 print("ViewPoint {} not found".format(viewPointName))
+    def updateViewPointType(self, params):
+        _, viewPointName = params[0]
+        _, typesOriginal = params[1]
 
+        types = re.findall(r'\{(.*?)\}', typesOriginal)[0].split(',')  # Regex to seperate types enclosed in {}
+
+        viewPoint = self.__findViewPoint(viewPointName)
+        if viewPoint is not None:
+           viewPoint._updateType(types)
+        else:
+            print("View Point does not exist")
+
+
+    def __findViewPoint(self, viewPointName):
+        linkedModel = self.getModels()[0]
+        viewPoint = linkedModel.getViewPointByName(viewPointName)
+        return viewPoint
     def __ifViewNameExists(self, viewName):
         linkedModel = self.getModels()[0]
         view = linkedModel.getViewByName(viewName)

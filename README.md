@@ -43,6 +43,7 @@ Further pointers:
 * ```CREATE -name [name] -typedBy [type] [-attributeName [value]]*```
 * ```LINK -from [fromClabject].[associationName] -to [toClabject] [-attributeName [value]]*```
 * ```UPDATE (-name [name] | -id [id]) [-attributeName [newValue]]*```
-* `CREATEVIEWPOINT -typedBy [type] -viewPointName [ViewPointName] -types {[Types]}`
-* `APPLYVIEW -name [ViewName] -applyOn [EntityName] -viewPoint [ViewPointName]`
+* `CREATEVIEWPOINT -typedBy [type] -viewPointName [ViewPointName] -types {[Types]}` 
+* `APPLYVIEW -name [ViewName] -applyOn [EntityName] -viewPoint [ViewPointName]` (Apply a view on an entity using a specific ViewPoint) 
+* `UPDATEVPTYPE -viewPointName [ViewPointName] -types {[NewTypes]}` (Update the types specified in the ViewPoint)
 * ~~```DELETE (-name {name} | -id {id})```~~ (Not currently supported, but will be in the future)

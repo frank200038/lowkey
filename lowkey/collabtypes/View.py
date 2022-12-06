@@ -3,6 +3,7 @@ from lowkey.collabtypes.Model import Model
 from lowkey.collabtypes import Literals
 from lowkey.lww.LWWVertex import LWWVertex
 from lowkey.lww.LWWEdge import LWWEdge
+from lowkey.lww.LWWGraph import LWWGraph
 from lowkey.collabtypes.ViewPoint import ViewPoint
 
 class View(Model):
@@ -73,17 +74,31 @@ class View(Model):
 
     def update(self):
         """
-        Update the view by adding new nodes and associations
+        Update the view by adding new nodes and associations, or construct new graphs if certain types are removed from ViewPoint
+
+        Due to the same reason as to why DELETE is not implemented, if types are removed from the ViewPoint,
+        a new graph will be simply constructed from the scratch
         """
 
-        originalNodes = self._nodes.copy()
-        self._nodes = self.__filterNodes()
+        flag = self._viewPoint.getFlag()
+        newNodes = []
 
-        newNodes = [node for node in self._nodes if node not in originalNodes]
+        if flag == 0: # Types unmodified or extended
+            originalNodes = self._nodes.copy()
+            self._nodes = self.__filterNodes()
+
+            newNodes = [node for node in self._nodes if node not in originalNodes]
+
+        elif flag < 0: # Types removed from the ViewPoint
+
+            # Reconstruct the Graph from scratch
+            self.persistence = LWWGraph()
+            self._nodes = newNodes = self.__filterNodes()
 
         if len(newNodes) != 0:
             self.__createViewGraph(newNodes)
 
+        self._viewPoint.restoreFlag()
     def __filterNodes(self):
         """
         Filter nodes that only belongs to the entity specified in the View
@@ -121,7 +136,7 @@ class View(Model):
 
         return filteredNodes
 
-    def __outAndInAssociationFromNodeVertices(self,vertices_node, node):
+    def __outAndInAssociationFromNodeVertices(self, vertices_node, node):
         """
         Interal auxiliary function to facilite the search of associations that has one end linked to a node already present in the graph
 

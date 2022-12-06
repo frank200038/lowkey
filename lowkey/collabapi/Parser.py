@@ -10,6 +10,7 @@ from lowkey.collabapi.commands.CreateAssociationCommand import CreateAssociation
 from lowkey.collabapi.commands.UpdateCommand import UpdateCommand
 from lowkey.collabapi.commands.ApplyViewCommand import ApplyViewCommand
 from lowkey.collabapi.commands.AddViewPointCommand import AddViewPointCommand
+from lowkey.collabapi.commands.UpdateViewPointTypeCommand import UpdateViewPointTypeCommand
 
 __author__ = "Istvan David"
 __copyright__ = "Copyright 2021, GEODES"
@@ -77,5 +78,7 @@ class Parser():
             return AddViewPointCommand(self.getParams(message))
         elif commandKeyWord == "APPLYVIEW":
             return ApplyViewCommand(self.getParams(message))
+        elif commandKeyWord == "UPDATEVPTYPE":
+            return UpdateViewPointTypeCommand(self.getParams(message))
         else:
             raise Error("Command is unsupported or invalid")

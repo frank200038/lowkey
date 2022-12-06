@@ -16,7 +16,7 @@ from metamodel import ShopPackage
 
 
 class DSLParser():
-    _globalCommands = ["APPLYVIEW","CREATEVIEWPOINT", "CREATE", "LINK", "UPDATE", "DELETE"]
+    _globalCommands = ["APPLYVIEW","CREATEVIEWPOINT","UPDATEVPTYPE", "CREATE", "LINK", "UPDATE", "DELETE"]
     _localCommands = ["READ", "OBJECTS","SHOWVIEW"]
 
     def tokenize(self, message):
@@ -96,6 +96,11 @@ class DSLParser():
             else:
                 return None
 
+            return command
+
+        elif tokens[0].upper() == "UPDATEVPTYPE" and len(tokens) == 3:
+            userCommand, viewName, types = tokens
+            command += 'UPDATEVPTYPE -viewPointName {} -types {}'.format(viewName, types)
             return command
 
         elif tokens[0].upper() == "LINK" and len(tokens) == 4:

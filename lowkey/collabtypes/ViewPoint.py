@@ -16,6 +16,7 @@ class ViewPoint(Model):
         self._model = model
         self._viewPointName = viewPointName
         self._types = types
+        self._flag = 0 # If the specified types have modified or not. 0 = unchanged/extended -1 = types removed
 
     def getTypes(self):
         return self._types
@@ -35,6 +36,32 @@ class ViewPoint(Model):
     def getViewPointName(self):
         return self._viewPointName
 
+    def getFlag(self):
+        return self._flag
+
+    def restoreFlag(self):
+        self._flag = 0
+
+    def _updateType(self, types):
+        """
+        Updates the types specified by the ViewPoint.
+        If types are extended (added), flag will remain unchanged
+        However, if types are removed, flag will be set to -1 to indicate some types are removed from the existing types
+
+        :param types: New Types of the ViewPoint
+        """
+        current_types = self._types.copy()
+
+        deleted = False
+
+        for type in current_types:
+            if type not in types:
+                deleted = True
+                break
+
+        self._flag = -1 if deleted else 0
+
+        self._types = types
     def __findAllNodes(self):
         """
         Returns all nodes of the model that are of the specified type. SuperType is supported as well.
