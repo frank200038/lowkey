@@ -47,4 +47,4 @@
 
 Local commands will not be sent to the server. Thus they will not be recorded or broadcasted to other clients. 
 
-Global commands will be sent to the server and will be recorded and broadcasted to other clients. **With the exception of `CREATEVIEWPOINT` and `APPLYVIEW` which will not be broadcasted to other clients.**
+Global commands will be sent to the server and will be recorded and broadcasted to other clients.

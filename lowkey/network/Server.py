@@ -55,19 +55,15 @@ class Server():
 
                 decoding = chardet.detect(message)['encoding']
 
-                send = True
 
                 if decoding is not None:
                     tokenized = message.decode(decoding).split(' ')
-                    if tokenized[1] == 'CREATEVIEWPOINT' or tokenized[1] == 'APPLYVIEW':
-                        send = False
                 print(message.decode(decoding))
-                if send:
-                    print("Saving message: {}".format(message))
-                    logging.debug("Saving message: {}".format(message))
-                    self._memory.saveMessage(message)
-                    logging.debug("Publishing update")
-                    self._publisher.send(message)
+                print("Saving message: {}".format(message))
+                logging.debug("Saving message: {}".format(message))
+                self._memory.saveMessage(message)
+                logging.debug("Publishing update")
+                self._publisher.send(message)
             
             # snapshot requests by joining clients
             if self._snapshot in items:
