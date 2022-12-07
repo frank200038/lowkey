@@ -82,33 +82,11 @@ class Model(Node):
 
     def getViewByName(self, name):
         views = [v for v in self.views if v.getViewName() == name]
-        return None if len(views) == 0 else views[0]
+        return None if len(views) == 0 else views[0] # Safe since names must be unique
 
     def getViewPointByName(self, name):
         viewPoints = [v for v in self.viewPoints if v.getViewPointName() == name]
-        return None if len(viewPoints) == 0 else viewPoints[0]
-
-    def returnViewWithType(self, *args):
-        """
-        Returns a view of the model with the given type(s)
-
-        :param args: Type(s) that are required to be present in a view
-        :return: List of views that contain the given type(s)
-        """
-        rightView = []
-
-        for v in self.views:
-            allCorrect = True
-            types = v.getTypes()
-            for type in args:
-                if type not in types:
-                    allCorrect = False
-                    break
-
-            if allCorrect:
-                rightView.append(v)
-
-        return rightView
+        return None if len(viewPoints) == 0 else viewPoints[0] # Safe since names must be unique
 
     def getViews(self):
         return self.views.copy()

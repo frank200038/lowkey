@@ -13,7 +13,9 @@ from metamodel.entities.ShopModel import ShopModel
 
 
 class ShopSession(Session):
-
+    """
+    Initiate the ShopModel with the default values.
+    """
     def __init__(self):
         super().__init__()
         self._shopmodel = ShopModel()

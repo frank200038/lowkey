@@ -55,8 +55,6 @@ class Session():
             pValue = param[1]
             logging.debug("Executing command 'assocation.setFeature({}, {})'.".format(pName, pValue))
 
-            #TODO : Maybe require a change (In case of multiple model value) ???
-            #TODO: Enforce check. No association with different entity (Addition of FOR keyword)
             if pName == Literals.ASSOCIATION_FROM:
                 fromClabject = self.getModels()[0].getNodeByName(pValue)
                 association.setFrom(fromClabject)
@@ -72,11 +70,16 @@ class Session():
 
 
     def createViewPoint(self, params):
+        """
+        Create a view point with a given name and types
+
+        :param params: transmited parameters containing the name of the view point and the types, and the type of model
+        """
         _, typedBy = params[0]
         _, viewPointName = params[1]
         _, typesOriginal = params[2]
 
-        if self.__ifViewPointNameExists(viewPointName):
+        if self.__findViewPoint(viewPointName):
             print("ViewPoint {} already exists".format(viewPointName))
             return
         else:
@@ -87,31 +90,44 @@ class Session():
             linkedModel.appendViewPoint(createdViewPoint)
 
     def applyView(self, params):
+        """
+        Create a view that acts on a specific entity and governed by a given view point
+
+        :param params: transmited parameters containing the name of the view, the name of the view point and the name of the entity
+        """
         _, viewName = params[0]
         _, entityName = params[1]
         _, viewPointName = params[2]
 
-        if self.__ifViewNameExists(viewName):
+        # Error handling: View cannot be created if the view name already exists, or if the view point does not exist, or if the entity does not exist
+        if self.__findView(viewName):
             print("View {} already exists".format(viewName))
             return
         else:
-            viewPoint = self.getModels()[0].getViewPointByName(viewPointName)
+            viewPoint = self.__findViewPoint(viewPointName)
 
             if viewPoint is not None:
                 try:
                     createdView = View(viewPoint=viewPoint, entityName=entityName, viewName=viewName)
                     self.getModels()[0].appendView(createdView)
                 except Exception as e:
-                    print("Error while applying view: {}".format(e))
+                    print("Error on applying View. {}".format(e))
             else:
                 print("ViewPoint {} not found".format(viewPointName))
+                return
     def updateViewPointType(self, params):
+        """
+        Responsible for updating the types specified in a given view point
+
+        :param params: Transmited parameters containing the name of the view point and the new types to be updated
+        """
         _, viewPointName = params[0]
         _, typesOriginal = params[1]
 
         types = re.findall(r'\{(.*?)\}', typesOriginal)[0].split(',')  # Regex to seperate types enclosed in {}
 
         viewPoint = self.__findViewPoint(viewPointName)
+
         if viewPoint is not None:
            viewPoint._updateType(types)
         else:
@@ -119,16 +135,25 @@ class Session():
 
 
     def __findViewPoint(self, viewPointName):
+        """
+        Find a view point by its name
+
+        :param viewPointName: Name of the view point to be found
+        :return: the view point if found, None otherwise
+        """
         linkedModel = self.getModels()[0]
         viewPoint = linkedModel.getViewPointByName(viewPointName)
         return viewPoint
-    def __ifViewNameExists(self, viewName):
+
+    def __findView(self, viewName):
+        """
+        Find a view by its name
+
+        :param viewName: name of the view to be found
+        :return: view if found, None otherwise
+        """
         linkedModel = self.getModels()[0]
         view = linkedModel.getViewByName(viewName)
-        return view is not None
+        return view
 
-    def __ifViewPointNameExists(self, viewPointName):
-        linkedModel = self.getModels()[0]
-        viewPoint = linkedModel.getViewPointByName(viewPointName)
-        return viewPoint is not None
 

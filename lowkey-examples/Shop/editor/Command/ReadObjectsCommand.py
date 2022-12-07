@@ -1,6 +1,9 @@
 from lowkey.collabapi.commands.Command import Command
 
 class ReadObjectsCommand(Command):
+    """
+    List out all objects created, including Views and ViewPoints
+    """
     def execute(self, session):
         root = session.getModels()[0]
         nodes = root.getNodes()

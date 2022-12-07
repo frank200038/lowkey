@@ -16,6 +16,9 @@ from metamodel import ShopPackage
 
 
 class DSLParser():
+    """
+    Responsible of converting Shop commands into universal commands of Lowkey
+    """
     _globalCommands = ["APPLYVIEW","CREATEVIEWPOINT","UPDATEVPTYPE", "CREATE", "LINK", "UPDATE", "DELETE"]
     _localCommands = ["READ", "OBJECTS","SHOWVIEW"]
 
@@ -64,12 +67,10 @@ class DSLParser():
                                                                                   viewName, types)
             return command
 
-        if tokens[0].upper() == "CREATE" and len(tokens) >= 3:
+        elif tokens[0].upper() == "CREATE" and len(tokens) >= 3:
             userCommand = tokens[0]
             types = tokens[1]
             name = tokens[2]
-
-
             command += '{} -{} {} -{} {}'.format(userCommand, Literals.TYPED_BY, types, Literals.NAME, name)
 
             # Special : Product has a price

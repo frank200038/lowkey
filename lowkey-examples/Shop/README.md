@@ -1,5 +1,9 @@
 # Shop Example
 
+## Remarks
+
+Most of the files follow the same design and organization as the [MindMap example](https://github.com/geodes-sms/lowkey/tree/main/lowkey-examples/mindmap) presented in the lowkey framework.
+
 ## Structure
 
 ![Image](./img/shop_metamodel.png)

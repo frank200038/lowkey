@@ -8,6 +8,9 @@ from metamodel.entities.Film import Film
 from metamodel.entities.CD import CD
 from metamodel.entities.Book import Book
 
+"""
+Print out Shop with all its details (Associated members, employees, orders etc.) in a tree structure.
+"""
 def printShop(shopClabject):
     shop = Shop(clabject = shopClabject)
 

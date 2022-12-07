@@ -16,12 +16,15 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
 
 class PrintViewCommand(Command):
+    """
+    Visualize the view in a tree structure.
 
+    Using ViewPrintHelper to print the view.
+    """
     def __init__(self, viewName):
         self._viewName = viewName
 
     def execute(self, session):
-        # logging.debug(" Executing command 'SHOWVIEW' in session {}.".format(session._id))
         root = session.getModels()[0]
 
         view = root.getViewByName(self._viewName)
@@ -34,6 +37,9 @@ class PrintViewCommand(Command):
             printer.printView()
 
 class ViewPrintHelper():
+    """
+    Auxiliary class that is actually responsible for printing the view by traversing the LWWGraph of the View.
+    """
 
     def __init__(self, view):
         self._view = view

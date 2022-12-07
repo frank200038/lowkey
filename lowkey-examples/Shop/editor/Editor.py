@@ -14,6 +14,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 
 
 class Editor(Client):
+    """
+    Editor class responsible of interacting with user and sending messages to the server. Specific to the Shop example.
+    """
     __encoding = "utf-8"
 
     def __init__(self):
